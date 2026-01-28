@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Navbar from './components/Navbar';
 import About from './components/About';
 import Performers from './components/Performers';
 import Contact from './components/Contact';
 import './App.css';
 
-function App() {
+const App = () => {
   const [activeSection, setActiveSection] = useState('about');
 
   const scrollToSection = (sectionId) => {
     setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -29,6 +26,6 @@ function App() {
       </footer>
     </div>
   );
-}
+};
 
 export default App;

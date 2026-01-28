@@ -1,7 +1,12 @@
-import React from 'react';
 import './About.css';
 
-function About() {
+const About = () => {
+  const features = [
+    { icon: '\u2733', title: 'Premium Talent', description: 'Handpicked performers with proven track records' },
+    { icon: '\u2665', title: 'Personalized Service', description: 'Customized entertainment solutions for every event' },
+    { icon: '\u2714', title: 'Reliability', description: 'Professional coordination from booking to performance' }
+  ];
+
   return (
     <section id="about" className="about-section">
       <div className="about-hero">
@@ -24,25 +29,17 @@ function About() {
           </p>
         </div>
         <div className="about-features">
-          <div className="feature">
-            <div className="feature-icon">&#9733;</div>
-            <h3>Premium Talent</h3>
-            <p>Handpicked performers with proven track records</p>
-          </div>
-          <div className="feature">
-            <div className="feature-icon">&#9829;</div>
-            <h3>Personalized Service</h3>
-            <p>Customized entertainment solutions for every event</p>
-          </div>
-          <div className="feature">
-            <div className="feature-icon">&#10004;</div>
-            <h3>Reliability</h3>
-            <p>Professional coordination from booking to performance</p>
-          </div>
+          {features.map(({ icon, title, description }) => (
+            <div key={title} className="feature">
+              <div className="feature-icon">{icon}</div>
+              <h3>{title}</h3>
+              <p>{description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
-}
+};
 
 export default About;

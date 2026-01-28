@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './Navbar.css';
 
-function Navbar({ activeSection, onNavClick }) {
+const Navbar = ({ activeSection, onNavClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -26,13 +24,13 @@ function Navbar({ activeSection, onNavClick }) {
           <span className="logo-text">ServicePromo</span>
         </div>
         <ul className="navbar-menu">
-          {navItems.map((item) => (
-            <li key={item.id} className="navbar-item">
+          {navItems.map(({ id, label }) => (
+            <li key={id} className="navbar-item">
               <button
-                className={`navbar-link ${activeSection === item.id ? 'active' : ''}`}
-                onClick={() => onNavClick(item.id)}
+                className={`navbar-link ${activeSection === id ? 'active' : ''}`}
+                onClick={() => onNavClick(id)}
               >
-                {item.label}
+                {label}
               </button>
             </li>
           ))}
@@ -40,6 +38,6 @@ function Navbar({ activeSection, onNavClick }) {
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
