@@ -1,0 +1,124 @@
+.performers-section {
+  background-color: #f8f9fa;
+  padding: 80px 30px;
+}
+
+.performers-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.performers-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #1a1a2e;
+  margin-bottom: 15px;
+}
+
+.performers-intro {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 50px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.performers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.performer-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.performer-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.performer-image {
+  height: 200px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-placeholder span {
+  font-size: 2.5rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+.performer-info {
+  padding: 25px;
+}
+
+.performer-category {
+  display: inline-block;
+  background: #e94560;
+  color: #fff;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.performer-info h3 {
+  font-size: 1.3rem;
+  color: #1a1a2e;
+  margin-bottom: 10px;
+}
+
+.performer-info p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.book-btn {
+  background: transparent;
+  border: 2px solid #1a1a2e;
+  color: #1a1a2e;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.book-btn:hover {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .performers-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .performers-grid {
+    grid-template-columns: 1fr;
+  }
+}
