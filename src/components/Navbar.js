@@ -25,9 +25,17 @@ const Navbar = ({ activeSection, onNavClick }) => {
     >
       <div className="navbar-container">
         <div className="navbar-logo">
-          <a href="#about" aria-label="ServicePromo - Go to home">
-            <span className="logo-text">ServicePromo</span>
-          </a>
+          <button
+            onClick={() => onNavClick('about')}
+            aria-label="RhodeyStark Events - Go to About section"
+            className="logo-button"
+          >
+            <img
+              src="/logo.png"
+              alt="RhodeyStark Events"
+              className="logo-image"
+            />
+          </button>
         </div>
         <ul className="navbar-menu" role="menubar" aria-label="Site sections">
           {navItems.map(({ id, label }) => (
