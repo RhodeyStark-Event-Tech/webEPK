@@ -31,26 +31,44 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="contact-section">
+    <section
+      id="contact"
+      className="contact-section"
+      role="region"
+      aria-labelledby="contact-heading"
+    >
       <div className="contact-container">
-        <h2>Contact Us</h2>
-        <p className="contact-intro">
+        <h2 id="contact-heading">Contact Us</h2>
+        <p className="contact-intro" id="contact-description">
           Ready to book? Have questions? We'd love to hear from you!
         </p>
         <div className="contact-content">
-          <div className="contact-info">
+          <aside
+            className="contact-info"
+            role="complementary"
+            aria-label="Contact information"
+          >
             {contactInfo.map(({ title, lines }) => (
-              <div key={title} className="info-item">
+              <address key={title} className="info-item">
                 <h3>{title}</h3>
                 {lines.map((line, idx) => (
                   <p key={idx}>{line}</p>
                 ))}
-              </div>
+              </address>
             ))}
-          </div>
-          <form className="contact-form" onSubmit={handleSubmit}>
+          </aside>
+          <form
+            className="contact-form"
+            onSubmit={handleSubmit}
+            aria-labelledby="contact-heading"
+            aria-describedby="contact-description"
+            noValidate
+          >
             <div className="form-group">
-              <label htmlFor="name">Name *</label>
+              <label htmlFor="name">
+                Name <span aria-hidden="true">*</span>
+                <span className="sr-only">(required)</span>
+              </label>
               <input
                 type="text"
                 id="name"
@@ -58,10 +76,15 @@ const Contact = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                aria-required="true"
+                autoComplete="name"
               />
             </div>
             <div className="form-group">
-              <label htmlFor="email">Email *</label>
+              <label htmlFor="email">
+                Email <span aria-hidden="true">*</span>
+                <span className="sr-only">(required)</span>
+              </label>
               <input
                 type="email"
                 id="email"
@@ -69,6 +92,8 @@ const Contact = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                aria-required="true"
+                autoComplete="email"
               />
             </div>
             <div className="form-group">
@@ -79,6 +104,7 @@ const Contact = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
+                autoComplete="tel"
               />
             </div>
             <div className="form-group">
@@ -88,6 +114,7 @@ const Contact = () => {
                 name="eventType"
                 value={formData.eventType}
                 onChange={handleChange}
+                aria-describedby="eventType-help"
               >
                 <option value="">Select an event type</option>
                 <option value="wedding">Wedding</option>
@@ -96,9 +123,15 @@ const Contact = () => {
                 <option value="festival">Festival/Concert</option>
                 <option value="other">Other</option>
               </select>
+              <span id="eventType-help" className="sr-only">
+                Choose the type of event you are planning
+              </span>
             </div>
             <div className="form-group">
-              <label htmlFor="message">Message *</label>
+              <label htmlFor="message">
+                Message <span aria-hidden="true">*</span>
+                <span className="sr-only">(required)</span>
+              </label>
               <textarea
                 id="message"
                 name="message"
@@ -106,9 +139,12 @@ const Contact = () => {
                 value={formData.message}
                 onChange={handleChange}
                 required
+                aria-required="true"
               />
             </div>
-            <button type="submit" className="submit-btn">Send Message</button>
+            <button type="submit" className="submit-btn">
+              Send Message
+            </button>
           </form>
         </div>
       </div>

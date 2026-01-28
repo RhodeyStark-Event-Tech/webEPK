@@ -41,27 +41,48 @@ const Performers = () => {
   ];
 
   return (
-    <section id="performers" className="performers-section">
+    <section
+      id="performers"
+      className="performers-section"
+      role="region"
+      aria-labelledby="performers-heading"
+    >
       <div className="performers-container">
-        <h2>Our Performers</h2>
-        <p className="performers-intro">
+        <h2 id="performers-heading">Our Performers</h2>
+        <p className="performers-intro" id="performers-description">
           Discover our talented roster of performers ready to bring your event to life
         </p>
-        <div className="performers-grid">
+        <div
+          className="performers-grid"
+          role="list"
+          aria-describedby="performers-description"
+        >
           {performers.map(({ id, name, category, description }) => (
-            <div key={id} className="performer-card">
-              <div className="performer-image">
+            <article
+              key={id}
+              className="performer-card"
+              role="listitem"
+              aria-labelledby={`performer-name-${id}`}
+            >
+              <div className="performer-image" aria-hidden="true">
                 <div className="image-placeholder">
                   <span>{name.charAt(0)}</span>
                 </div>
               </div>
               <div className="performer-info">
-                <span className="performer-category">{category}</span>
-                <h3>{name}</h3>
+                <span className="performer-category" aria-label={`Category: ${category}`}>
+                  {category}
+                </span>
+                <h3 id={`performer-name-${id}`}>{name}</h3>
                 <p>{description}</p>
-                <button className="book-btn">Learn More</button>
+                <button
+                  className="book-btn"
+                  aria-label={`Learn more about ${name}`}
+                >
+                  Learn More
+                </button>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>

@@ -8,14 +8,21 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="about-section">
+    <section
+      id="about"
+      className="about-section"
+      role="region"
+      aria-labelledby="about-heading"
+    >
       <div className="about-hero">
-        <h1>Welcome to ServicePromo</h1>
-        <p className="tagline">Elevating Your Events with Exceptional Talent</p>
+        <h1 id="about-heading">Welcome to ServicePromo</h1>
+        <p className="tagline" role="doc-subtitle">
+          Elevating Your Events with Exceptional Talent
+        </p>
       </div>
       <div className="about-content">
         <div className="about-text">
-          <h2>Who We Are</h2>
+          <h2 id="who-we-are">Who We Are</h2>
           <p>
             ServicePromo is a premier talent management and event services company
             dedicated to bringing extraordinary performances to your special occasions.
@@ -28,13 +35,22 @@ const About = () => {
             exceed your expectations.
           </p>
         </div>
-        <div className="about-features">
+        <div
+          className="about-features"
+          role="list"
+          aria-label="Our key features"
+        >
           {features.map(({ icon, title, description }) => (
-            <div key={title} className="feature">
-              <div className="feature-icon">{icon}</div>
-              <h3>{title}</h3>
+            <article
+              key={title}
+              className="feature"
+              role="listitem"
+              aria-labelledby={`feature-${title.replace(/\s+/g, '-').toLowerCase()}`}
+            >
+              <div className="feature-icon" aria-hidden="true">{icon}</div>
+              <h3 id={`feature-${title.replace(/\s+/g, '-').toLowerCase()}`}>{title}</h3>
               <p>{description}</p>
-            </div>
+            </article>
           ))}
         </div>
       </div>

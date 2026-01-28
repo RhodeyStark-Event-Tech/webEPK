@@ -15,13 +15,18 @@ const App = () => {
 
   return (
     <div className="App">
-      <Navbar activeSection={activeSection} onNavClick={scrollToSection} />
-      <main>
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      <header role="banner">
+        <Navbar activeSection={activeSection} onNavClick={scrollToSection} />
+      </header>
+      <main id="main-content" role="main" aria-label="Main content">
         <About />
         <Performers />
         <Contact />
       </main>
-      <footer className="footer">
+      <footer className="footer" role="contentinfo">
         <p>&copy; 2026 Service Promo. All rights reserved.</p>
       </footer>
     </div>

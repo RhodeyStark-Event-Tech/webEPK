@@ -18,17 +18,26 @@ const Navbar = ({ activeSection, onNavClick }) => {
   ];
 
   return (
-    <nav className={`navbar ${isScrolled ? 'navbar-scrolled' : ''}`}>
+    <nav
+      className={`navbar ${isScrolled ? 'navbar-scrolled' : ''}`}
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div className="navbar-container">
         <div className="navbar-logo">
-          <span className="logo-text">ServicePromo</span>
+          <a href="#about" aria-label="ServicePromo - Go to home">
+            <span className="logo-text">ServicePromo</span>
+          </a>
         </div>
-        <ul className="navbar-menu">
+        <ul className="navbar-menu" role="menubar" aria-label="Site sections">
           {navItems.map(({ id, label }) => (
-            <li key={id} className="navbar-item">
+            <li key={id} className="navbar-item" role="none">
               <button
+                role="menuitem"
                 className={`navbar-link ${activeSection === id ? 'active' : ''}`}
                 onClick={() => onNavClick(id)}
+                aria-current={activeSection === id ? 'page' : undefined}
+                aria-label={`Navigate to ${label} section`}
               >
                 {label}
               </button>
