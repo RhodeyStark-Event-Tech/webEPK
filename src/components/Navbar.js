@@ -31,7 +31,7 @@ const Navbar = ({ activeSection, onNavClick }) => {
             className="logo-button"
           >
             <img
-              src="/logo.png"
+              src="/assets/logo.png"
               alt="RhodeyStark Events"
               className="logo-image"
             />
