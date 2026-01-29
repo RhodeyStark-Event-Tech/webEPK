@@ -27,7 +27,7 @@ const About = () => {
       aria-labelledby="about-heading"
     >
       <div className="about-hero">
-        <h1 id="about-heading">Welcome to ServicePromo</h1>
+        <h1 id="about-heading">RhodeyStark Events</h1>
         <p className="tagline" role="doc-subtitle">
           FUN. EASY. KNOWLEDGABLE.
         </p>
