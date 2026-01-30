@@ -79,9 +79,15 @@ const Modal = ({ isOpen, onClose, media }) => {
         </div>
 
         <div className="modal-actions">
-          <button className="book-now-btn" aria-label="Book this performer">
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLScjkQJ-zXpR-GW-cXaXnpCyiX0vU_vemeCXL7g4weWQhfCKiA/viewform?usp=sharing&ouid=111455180566421488224"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="book-now-btn"
+            aria-label="Book this performer - opens booking form in new tab"
+          >
             Book Now
-          </button>
+          </a>
         </div>
       </div>
     </div>
