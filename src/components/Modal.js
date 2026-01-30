@@ -77,6 +77,12 @@ const Modal = ({ isOpen, onClose, media }) => {
             </div>
           </Media>
         </div>
+
+        <div className="modal-actions">
+          <button className="book-now-btn" aria-label="Book this performer">
+            Book Now
+          </button>
+        </div>
       </div>
     </div>
   );

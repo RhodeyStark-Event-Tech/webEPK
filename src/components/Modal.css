@@ -204,6 +204,40 @@
   border: none;
 }
 
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.book-now-btn {
+  background: #e94560;
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 15px 40px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+}
+
+.book-now-btn:hover {
+  background: #d63d56;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5);
+}
+
+.book-now-btn:focus {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.book-now-btn:active {
+  transform: translateY(0);
+}
+
 @media (max-width: 768px) {
   .modal-content {
     padding: 20px;
