@@ -1,0 +1,85 @@
+import { useEffect, useCallback } from 'react';
+import { Media, Player, controls } from 'react-media-player';
+import './Modal.css';
+
+const { PlayPause, MuteUnmute, Progress, SeekBar, Duration, CurrentTime, Volume } = controls;
+
+const Modal = ({ isOpen, onClose, media }) => {
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  }, [onClose]);
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, handleKeyDown]);
+
+  if (!isOpen) return null;
+
+  const isVideo = media?.type === 'video';
+
+  return (
+    <div
+      className="modal-overlay"
+      onClick={handleBackdropClick}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div className="modal-content">
+        <button
+          className="modal-close"
+          onClick={onClose}
+          aria-label="Close modal"
+        >
+          &times;
+        </button>
+
+        <h2 id="modal-title" className="modal-title">
+          {media?.title ?? 'Media Player'}
+        </h2>
+
+        {media?.description && (
+          <p className="modal-description">{media.description}</p>
+        )}
+
+        <div className="media-player-container">
+          <Media>
+            <div className="media-player">
+              <Player
+                src={media?.src ?? ''}
+                className={isVideo ? 'media-video' : 'media-audio'}
+                autoPlay={false}
+              />
+              <div className="media-controls">
+                <PlayPause className="media-control-btn" />
+                <CurrentTime className="media-time" />
+                <SeekBar className="media-seekbar" />
+                <Duration className="media-time" />
+                <MuteUnmute className="media-control-btn" />
+                <Volume className="media-volume" />
+              </div>
+            </div>
+          </Media>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Modal;
