@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Modal from './Modal';
+import VideoUpload from './VideoUpload';
 import './Performers.css';
 
 const Performers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPerformer, setSelectedPerformer] = useState(null);
+  const [selectedMedia, setSelectedMedia] = useState(null);
+  const [uploadedMedia, setUploadedMedia] = useState(null);
 
   const performers = [
     {
@@ -82,14 +84,33 @@ const Performers = () => {
   ];
 
   const handleLearnMore = (performer) => {
-    setSelectedPerformer(performer);
+    setSelectedMedia(performer.media);
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleVideoUpload = useCallback((media) => {
+    setUploadedMedia(media);
+    setSelectedMedia(media);
+    setIsModalOpen(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
-    setSelectedPerformer(null);
-  };
+    // Revoke blob URL when modal closes to free memory
+    if (selectedMedia?.isBlob) {
+      URL.revokeObjectURL(selectedMedia.src);
+    }
+    setSelectedMedia(null);
+  }, [selectedMedia]);
+
+  // Cleanup blob URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (uploadedMedia?.isBlob) {
+        URL.revokeObjectURL(uploadedMedia.src);
+      }
+    };
+  }, [uploadedMedia]);
 
   return (
     <section
@@ -103,6 +124,9 @@ const Performers = () => {
         <p className="performers-intro" id="performers-description">
           Discover our talented roster of performers ready to bring your event to life
         </p>
+
+        <VideoUpload onVideoSelect={handleVideoUpload} />
+
         <div
           className="performers-grid"
           role="list"
@@ -142,7 +166,7 @@ const Performers = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        media={selectedPerformer?.media}
+        media={selectedMedia}
       />
     </section>
   );
