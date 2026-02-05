@@ -50,12 +50,10 @@ const Modal = ({ isOpen, onClose, media }) => {
           &times;
         </button>
 
-        <h2 id="modal-title" className="modal-title">
-          {media?.title ?? 'Media Player'}
-        </h2>
+ 
 
         {media?.description && (
-          <p className="modal-description">{media.description}</p>
+          <h1 className="modal-description">{media.description}</h1>
         )}
 
         <div className="media-player-container">

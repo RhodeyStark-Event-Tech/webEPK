@@ -4,13 +4,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  color: rgba(255, 255, 255, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
   padding: 20px;
-  animation: fadeIn 0.3s ease;
+  /* animation: fadeIn 0.3s ease; */
 }
 
 @keyframes fadeIn {
@@ -61,7 +61,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
 }
 
 .modal-close:hover {
@@ -129,7 +131,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
 }
 
 .media-control-btn:hover {
@@ -219,7 +223,10 @@
   padding: 15px 40px;
   border-radius: 30px;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
   box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
 }
 
