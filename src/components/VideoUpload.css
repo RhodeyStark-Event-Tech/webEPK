@@ -20,6 +20,12 @@
   box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
 }
 
+.video-upload.uploading {
+  cursor: default;
+  border-color: #e94560;
+  background: rgba(233, 69, 96, 0.1);
+}
+
 .video-upload-input {
   display: none;
 }
@@ -44,6 +50,39 @@
 .upload-hint {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.9rem;
+  margin: 0;
+}
+
+.firebase-hint {
+  margin-top: 8px;
+  color: #e94560;
+  font-size: 0.8rem;
+}
+
+.upload-progress-container {
+  width: 100%;
+  max-width: 300px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  margin: 0 auto 20px;
+  overflow: hidden;
+}
+
+.upload-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #e94560, #ff6b8a);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.upload-error {
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: 8px;
 }
 
 @media (max-width: 768px) {
@@ -62,5 +101,9 @@
 
   .upload-hint {
     font-size: 0.8rem;
+  }
+
+  .upload-progress-container {
+    max-width: 200px;
   }
 }
