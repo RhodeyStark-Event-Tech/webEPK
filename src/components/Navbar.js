@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Navbar.css';
 
-const Navbar = ({ activeSection, onNavClick }) => {
+const Navbar = ({ activeSection, onNavClick, onUploadsClick, isAuthenticated }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -14,8 +14,17 @@ const Navbar = ({ activeSection, onNavClick }) => {
   const navItems = [
     { id: 'about', label: 'About' },
     { id: 'performers', label: 'Performers' },
-    { id: 'contact', label: 'Contact' }
+    { id: 'contact', label: 'Contact' },
+    { id: 'uploads', label: 'Uploads', protected: true }
   ];
+
+  const handleNavItemClick = (item) => {
+    if (item.protected && !isAuthenticated) {
+      onUploadsClick();
+    } else {
+      onNavClick(item.id);
+    }
+  };
 
   return (
     <nav
@@ -38,16 +47,16 @@ const Navbar = ({ activeSection, onNavClick }) => {
           </button>
         </div>
         <ul className="navbar-menu" role="menubar" aria-label="Site sections">
-          {navItems.map(({ id, label }) => (
-            <li key={id} className="navbar-item" role="none">
+          {navItems.map((item) => (
+            <li key={item.id} className="navbar-item" role="none">
               <button
                 role="menuitem"
-                className={`navbar-link ${activeSection === id ? 'active' : ''}`}
-                onClick={() => onNavClick(id)}
-                aria-current={activeSection === id ? 'page' : undefined}
-                aria-label={`Navigate to ${label} section`}
+                className={`navbar-link ${activeSection === item.id ? 'active' : ''}`}
+                onClick={() => handleNavItemClick(item)}
+                aria-current={activeSection === item.id ? 'page' : undefined}
+                aria-label={`Navigate to ${item.label} section`}
               >
-                {label}
+                {item.label}
               </button>
             </li>
           ))}
