@@ -71,7 +71,7 @@ const Uploads = ({ isAuthenticated }) => {
       setPerformers(updatedPerformers);
     } catch (err) {
       console.error('Error assigning media:', err);
-      alert('Failed to assign media. Please try again.');
+      alert(`Failed to assign media: ${err.message}`);
     } finally {
       setIsSaving(prev => ({ ...prev, [`media-${performerId}`]: false }));
     }
@@ -100,7 +100,7 @@ const Uploads = ({ isAuthenticated }) => {
       setPerformers(updatedPerformers);
     } catch (err) {
       console.error('Error assigning photo:', err);
-      alert('Failed to assign photo. Please try again.');
+      alert(`Failed to assign photo: ${err.message}`);
     } finally {
       setIsSaving(prev => ({ ...prev, [`photo-${performerId}`]: false }));
     }
