@@ -32,6 +32,7 @@ const Modal = ({ isOpen, onClose, media }) => {
   if (!isOpen) return null;
 
   const isVideo = media?.type === 'video';
+  const isImage = media?.type === 'image';
 
   return (
     <div
@@ -50,31 +51,39 @@ const Modal = ({ isOpen, onClose, media }) => {
           &times;
         </button>
 
- 
-
         {media?.description && (
           <h1 className="modal-description">{media.description}</h1>
         )}
 
-        <div className="media-player-container">
-          <Media>
-            <div className="media-player">
-              <Player
-                src={media?.src ?? ''}
-                className={isVideo ? 'media-video' : 'media-audio'}
-                autoPlay={false}
-              />
-              <div className="media-controls">
-                <PlayPause className="media-control-btn" />
-                <CurrentTime className="media-time" />
-                <SeekBar className="media-seekbar" />
-                <Duration className="media-time" />
-                <MuteUnmute className="media-control-btn" />
-                <Volume className="media-volume" />
+        {isImage ? (
+          <div className="media-image-container">
+            <img
+              src={media?.src}
+              alt={media?.title || 'Image'}
+              className="media-image"
+            />
+          </div>
+        ) : (
+          <div className="media-player-container">
+            <Media>
+              <div className="media-player">
+                <Player
+                  src={media?.src ?? ''}
+                  className={isVideo ? 'media-video' : 'media-audio'}
+                  autoPlay={false}
+                />
+                <div className="media-controls">
+                  <PlayPause className="media-control-btn" />
+                  <CurrentTime className="media-time" />
+                  <SeekBar className="media-seekbar" />
+                  <Duration className="media-time" />
+                  <MuteUnmute className="media-control-btn" />
+                  <Volume className="media-volume" />
+                </div>
               </div>
-            </div>
-          </Media>
-        </div>
+            </Media>
+          </div>
+        )}
 
         <div className="modal-actions">
           <a

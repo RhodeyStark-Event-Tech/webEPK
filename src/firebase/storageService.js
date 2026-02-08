@@ -70,7 +70,8 @@ export const listFiles = async (folder = 'media') => {
           size: metadata.size,
           timeCreated: metadata.timeCreated,
           type: metadata.contentType?.startsWith('video/') ? 'video' :
-                metadata.contentType?.startsWith('audio/') ? 'audio' : 'other'
+                metadata.contentType?.startsWith('audio/') ? 'audio' :
+                metadata.contentType?.startsWith('image/') ? 'image' : 'other'
         };
       })
     );

@@ -210,6 +210,180 @@
   outline-offset: 3px;
 }
 
+/* Performer Assignment Section */
+.performer-assignment-section {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 2px solid rgba(233, 69, 96, 0.2);
+}
+
+.performer-assignment-section h3 {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.assignment-intro {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 30px;
+}
+
+.performer-assignment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.performer-assignment-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.performer-assignment-card:hover {
+  border-color: rgba(233, 69, 96, 0.3);
+}
+
+.performer-assignment-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.performer-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e94560 0%, #0f3460 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.performer-avatar span {
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.performer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.performer-details h4 {
+  color: #fff;
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+}
+
+.performer-category-badge {
+  display: inline-block;
+  background: rgba(233, 69, 96, 0.2);
+  color: #e94560;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.assignment-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.assignment-field {
+  position: relative;
+}
+
+.assignment-field label {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.assignment-field select {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23fff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 35px;
+}
+
+.assignment-field select:hover:not(:disabled) {
+  border-color: rgba(233, 69, 96, 0.5);
+}
+
+.assignment-field select:focus {
+  outline: none;
+  border-color: #e94560;
+  box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
+}
+
+.assignment-field select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.assignment-field select option {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 10px;
+}
+
+.saving-indicator {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #e94560;
+  font-size: 0.75rem;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.current-assignment {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.assignment-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
+
+.assignment-value {
+  color: #e94560;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .uploads-section {
     padding: 60px 20px;
@@ -234,5 +408,9 @@
   .uploaded-file-info {
     flex-direction: column;
     text-align: center;
+  }
+
+  .performer-assignment-grid {
+    grid-template-columns: 1fr;
   }
 }

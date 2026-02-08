@@ -14,9 +14,13 @@ const VideoUpload = ({ onVideoSelect, onUploadComplete, useFirebase = true }) =>
 
     setError(null);
 
-    const validTypes = ['video/mp4', 'video/quicktime', 'video/webm', 'audio/mpeg', 'audio/wav'];
+    const validTypes = [
+      'video/mp4', 'video/quicktime', 'video/webm',
+      'audio/mpeg', 'audio/wav',
+      'image/jpeg', 'image/png', 'image/gif', 'image/webp'
+    ];
     if (!validTypes.includes(file.type)) {
-      setError('Please upload a valid video (MP4, MOV, WebM) or audio (MP3, WAV) file.');
+      setError('Please upload a valid video (MP4, MOV, WebM), audio (MP3, WAV), or image (JPG, PNG, GIF, WebP) file.');
       return;
     }
 
@@ -27,6 +31,8 @@ const VideoUpload = ({ onVideoSelect, onUploadComplete, useFirebase = true }) =>
     }
 
     const isVideo = file.type.startsWith('video/');
+    const isImage = file.type.startsWith('image/');
+    const fileType = isVideo ? 'video' : isImage ? 'image' : 'audio';
 
     if (useFirebase) {
       // Upload to Firebase Storage
@@ -39,10 +45,10 @@ const VideoUpload = ({ onVideoSelect, onUploadComplete, useFirebase = true }) =>
         });
 
         const media = {
-          type: isVideo ? 'video' : 'audio',
+          type: fileType,
           src: uploadedFile.url,
           title: file.name.replace(/\.[^/.]+$/, ''),
-          description: `Uploaded ${isVideo ? 'video' : 'audio'} file`,
+          description: `Uploaded ${fileType} file`,
           fullPath: uploadedFile.fullPath,
           isFirebase: true
         };
@@ -65,10 +71,10 @@ const VideoUpload = ({ onVideoSelect, onUploadComplete, useFirebase = true }) =>
       const blobUrl = URL.createObjectURL(file);
       if (onVideoSelect) {
         onVideoSelect({
-          type: isVideo ? 'video' : 'audio',
+          type: fileType,
           src: blobUrl,
           title: file.name.replace(/\.[^/.]+$/, ''),
-          description: `Uploaded ${isVideo ? 'video' : 'audio'} file`,
+          description: `Uploaded ${fileType} file`,
           isBlob: true
         });
       }
@@ -120,7 +126,7 @@ const VideoUpload = ({ onVideoSelect, onUploadComplete, useFirebase = true }) =>
       <input
         ref={fileInputRef}
         type="file"
-        accept="video/mp4,video/quicktime,video/webm,audio/mpeg,audio/wav"
+        accept="video/mp4,video/quicktime,video/webm,audio/mpeg,audio/wav,image/jpeg,image/png,image/gif,image/webp"
         onChange={handleFileChange}
         className="video-upload-input"
         aria-hidden="true"
@@ -149,8 +155,8 @@ const VideoUpload = ({ onVideoSelect, onUploadComplete, useFirebase = true }) =>
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14v-4H8l4-4 4 4h-3v4h-2z"/>
             </svg>
           </div>
-          <p className="upload-text">Click or drag to upload video/audio</p>
-          <p className="upload-hint">MP4, MOV, WebM, MP3, WAV (max 100MB)</p>
+          <p className="upload-text">Click or drag to upload media</p>
+          <p className="upload-hint">Video, Audio, or Images (max 100MB)</p>
           {useFirebase && (
             <p className="upload-hint firebase-hint">Files will be stored in Firebase</p>
           )}
