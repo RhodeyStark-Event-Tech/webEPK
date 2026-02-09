@@ -106,14 +106,7 @@ export const getPerformer = async (performerId) => {
 export const assignMediaToPerformer = async (performerId, media) => {
   try {
     const performerRef = doc(db, PERFORMERS_COLLECTION, String(performerId));
-    const snapshot = await getDoc(performerRef);
-
-    if (snapshot.exists()) {
-      await updateDoc(performerRef, { media });
-    } else {
-      await setDoc(performerRef, { media });
-    }
-
+    await setDoc(performerRef, { media }, { merge: true });
     return true;
   } catch (error) {
     console.error('Error assigning media:', error);
@@ -125,14 +118,7 @@ export const assignMediaToPerformer = async (performerId, media) => {
 export const assignPhotoToPerformer = async (performerId, photo) => {
   try {
     const performerRef = doc(db, PERFORMERS_COLLECTION, String(performerId));
-    const snapshot = await getDoc(performerRef);
-
-    if (snapshot.exists()) {
-      await updateDoc(performerRef, { photo });
-    } else {
-      await setDoc(performerRef, { photo });
-    }
-
+    await setDoc(performerRef, { photo }, { merge: true });
     return true;
   } catch (error) {
     console.error('Error assigning photo:', error);
@@ -144,12 +130,7 @@ export const assignPhotoToPerformer = async (performerId, photo) => {
 export const removeMediaFromPerformer = async (performerId) => {
   try {
     const performerRef = doc(db, PERFORMERS_COLLECTION, String(performerId));
-    const snapshot = await getDoc(performerRef);
-
-    if (snapshot.exists()) {
-      await updateDoc(performerRef, { media: null });
-    }
-
+    await setDoc(performerRef, { media: null }, { merge: true });
     return true;
   } catch (error) {
     console.error('Error removing media:', error);
@@ -161,12 +142,7 @@ export const removeMediaFromPerformer = async (performerId) => {
 export const removePhotoFromPerformer = async (performerId) => {
   try {
     const performerRef = doc(db, PERFORMERS_COLLECTION, String(performerId));
-    const snapshot = await getDoc(performerRef);
-
-    if (snapshot.exists()) {
-      await updateDoc(performerRef, { photo: null });
-    }
-
+    await setDoc(performerRef, { photo: null }, { merge: true });
     return true;
   } catch (error) {
     console.error('Error removing photo:', error);
