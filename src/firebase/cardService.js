@@ -10,6 +10,16 @@ import { db } from './config';
 
 const CARDS_COLLECTION = 'cards';
 
+// Timeout wrapper for Firestore operations
+const withTimeout = (promise, timeoutMs = 15000) => {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Operation timed out. Please check your internet connection.')), timeoutMs)
+    )
+  ]);
+};
+
 // Get all cards
 export const getCards = async () => {
   try {
@@ -53,7 +63,7 @@ export const createCard = async (cardData) => {
     };
 
     console.log('Saving to Firestore:', dataToSave);
-    await setDoc(newDocRef, dataToSave);
+    await withTimeout(setDoc(newDocRef, dataToSave));
     console.log('Card saved successfully with ID:', newDocRef.id);
 
     return { id: newDocRef.id, ...cardData };
@@ -67,10 +77,10 @@ export const createCard = async (cardData) => {
 export const updateCard = async (cardId, cardData) => {
   try {
     const cardRef = doc(db, CARDS_COLLECTION, cardId);
-    await updateDoc(cardRef, {
+    await withTimeout(updateDoc(cardRef, {
       ...cardData,
       updatedAt: new Date().toISOString()
-    });
+    }));
     return { id: cardId, ...cardData };
   } catch (error) {
     console.error('Error updating card:', error);
@@ -82,7 +92,7 @@ export const updateCard = async (cardId, cardData) => {
 export const deleteCard = async (cardId) => {
   try {
     const cardRef = doc(db, CARDS_COLLECTION, cardId);
-    await deleteDoc(cardRef);
+    await withTimeout(deleteDoc(cardRef));
     return true;
   } catch (error) {
     console.error('Error deleting card:', error);
