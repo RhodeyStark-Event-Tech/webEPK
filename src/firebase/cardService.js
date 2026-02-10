@@ -4,10 +4,7 @@ import {
   getDocs,
   setDoc,
   updateDoc,
-  deleteDoc,
-  query,
-  orderBy,
-  serverTimestamp
+  deleteDoc
 } from 'firebase/firestore';
 import { db } from './config';
 
@@ -17,8 +14,7 @@ const CARDS_COLLECTION = 'cards';
 export const getCards = async () => {
   try {
     const cardsRef = collection(db, CARDS_COLLECTION);
-    const q = query(cardsRef, orderBy('createdAt', 'desc'));
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(cardsRef);
 
     const cards = [];
     snapshot.forEach((doc) => {
@@ -26,6 +22,13 @@ export const getCards = async () => {
         id: doc.id,
         ...doc.data()
       });
+    });
+
+    // Sort by createdAt client-side
+    cards.sort((a, b) => {
+      const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt) || 0;
+      const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt) || 0;
+      return dateB - dateA;
     });
 
     return cards;
@@ -38,14 +41,21 @@ export const getCards = async () => {
 // Create a new card
 export const createCard = async (cardData) => {
   try {
+    console.log('Creating card with data:', cardData);
     const cardsRef = collection(db, CARDS_COLLECTION);
-    // Generate a unique ID
     const newDocRef = doc(cardsRef);
-    await setDoc(newDocRef, {
+    const now = new Date().toISOString();
+
+    const dataToSave = {
       ...cardData,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    });
+      createdAt: now,
+      updatedAt: now
+    };
+
+    console.log('Saving to Firestore:', dataToSave);
+    await setDoc(newDocRef, dataToSave);
+    console.log('Card saved successfully with ID:', newDocRef.id);
+
     return { id: newDocRef.id, ...cardData };
   } catch (error) {
     console.error('Error creating card:', error);
@@ -59,7 +69,7 @@ export const updateCard = async (cardId, cardData) => {
     const cardRef = doc(db, CARDS_COLLECTION, cardId);
     await updateDoc(cardRef, {
       ...cardData,
-      updatedAt: serverTimestamp()
+      updatedAt: new Date().toISOString()
     });
     return { id: cardId, ...cardData };
   } catch (error) {
