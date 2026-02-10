@@ -3,7 +3,9 @@ import Navbar from './components/Navbar';
 import About from './components/About';
 import Performers from './components/Performers';
 import Contact from './components/Contact';
+import Cards from './components/Cards';
 import Uploads from './components/Uploads';
+import CardManagement from './components/CardManagement';
 import LoginModal from './components/LoginModal';
 import './App.css';
 
@@ -49,8 +51,10 @@ const App = () => {
       <main id="main-content" role="main" aria-label="Main content">
         <About />
         <Performers />
+        <Cards />
         <Contact />
         {isSuperAdmin && <Uploads />}
+        {isSuperAdmin && <CardManagement />}
       </main>
       <footer className="footer" role="contentinfo">
         <p>&copy; 2026 RhodeyStark Events. All rights reserved.</p>
