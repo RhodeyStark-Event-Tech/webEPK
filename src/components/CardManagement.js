@@ -3,6 +3,7 @@ import VideoUpload from './VideoUpload';
 import Modal from './Modal';
 import Spinner from './Spinner';
 import OptimizedImage from './OptimizedImage';
+import { useToast } from '../context/ToastContext';
 import { listFiles, formatFileSize } from '../firebase/storageService';
 import { getCards, createCard, updateCard, deleteCard } from '../firebase/cardService';
 import './CardManagement.css';
@@ -22,6 +23,7 @@ const getYouTubeVideoId = (url) => {
 };
 
 const CardManagement = () => {
+  const toast = useToast();
   const [cards, setCards] = useState([]);
   const [storedFiles, setStoredFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,10 +61,11 @@ const CardManagement = () => {
     } catch (err) {
       console.error('Error fetching data:', err);
       setError('Failed to load data. Check Firebase configuration.');
+      toast.error('Failed to load data. Check Firebase configuration.');
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     fetchData();
@@ -173,7 +176,7 @@ const CardManagement = () => {
   // Save card (create or update)
   const handleSave = async () => {
     if (!formData.title.trim()) {
-      alert('Please enter a card title.');
+      toast.warning('Please enter a card title.');
       return;
     }
 
@@ -181,14 +184,16 @@ const CardManagement = () => {
     try {
       if (isEditing && editingCardId) {
         await updateCard(editingCardId, formData);
+        toast.success('Card updated successfully!');
       } else {
         await createCard(formData);
+        toast.success('Card created successfully!');
       }
       await fetchData();
       resetForm();
     } catch (err) {
       console.error('Error saving card:', err);
-      alert(`Failed to save card: ${err.message}`);
+      toast.error(`Failed to save card: ${err.message}`);
     } finally {
       setIsSaving(false);
     }
@@ -204,9 +209,10 @@ const CardManagement = () => {
     try {
       await deleteCard(cardId);
       await fetchData();
+      toast.success('Card deleted successfully!');
     } catch (err) {
       console.error('Error deleting card:', err);
-      alert(`Failed to delete card: ${err.message}`);
+      toast.error(`Failed to delete card: ${err.message}`);
     } finally {
       setIsDeleting(false);
     }

@@ -1,8 +1,10 @@
 import { useRef, useCallback, useState } from 'react';
 import { uploadFile } from '../firebase/storageService';
+import { useToast } from '../context/ToastContext';
 import './VideoUpload.css';
 
 const VideoUpload = ({ onVideoSelect, onUploadComplete, useFirebase = true }) => {
+  const toast = useToast();
   const fileInputRef = useRef(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -20,13 +22,17 @@ const VideoUpload = ({ onVideoSelect, onUploadComplete, useFirebase = true }) =>
       'image/jpeg', 'image/png', 'image/gif', 'image/webp'
     ];
     if (!validTypes.includes(file.type)) {
-      setError('Please upload a valid video (MP4, MOV, WebM), audio (MP3, WAV), or image (JPG, PNG, GIF, WebP) file.');
+      const errorMsg = 'Please upload a valid video (MP4, MOV, WebM), audio (MP3, WAV), or image (JPG, PNG, GIF, WebP) file.';
+      setError(errorMsg);
+      toast.warning(errorMsg);
       return;
     }
 
     const maxSize = 100 * 1024 * 1024; // 100MB
     if (file.size > maxSize) {
-      setError('File size must be less than 100MB.');
+      const errorMsg = 'File size must be less than 100MB.';
+      setError(errorMsg);
+      toast.warning(errorMsg);
       return;
     }
 
@@ -59,9 +65,12 @@ const VideoUpload = ({ onVideoSelect, onUploadComplete, useFirebase = true }) =>
         if (onUploadComplete) {
           onUploadComplete(uploadedFile);
         }
+        toast.success(`${fileType.charAt(0).toUpperCase() + fileType.slice(1)} uploaded successfully!`);
       } catch (err) {
         console.error('Upload failed:', err);
-        setError('Upload failed. Please check your Firebase configuration.');
+        const errorMsg = 'Upload failed. Please check your Firebase configuration.';
+        setError(errorMsg);
+        toast.error(errorMsg);
       } finally {
         setIsUploading(false);
         setUploadProgress(0);

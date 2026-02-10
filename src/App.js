@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ToastProvider } from './context/ToastContext';
 import Navbar from './components/Navbar';
 import About from './components/About';
 import Performers from './components/Performers';
@@ -32,34 +33,40 @@ const App = () => {
 
   // Show login page if not authenticated
   if (!isAuthenticated) {
-    return <LoginModal onSuccess={handleLoginSuccess} />;
+    return (
+      <ToastProvider>
+        <LoginModal onSuccess={handleLoginSuccess} />
+      </ToastProvider>
+    );
   }
 
   return (
-    <div className="App">
-      <a href="#main-content" className="skip-link">
-        Skip to main content
-      </a>
-      <header role="banner">
-        <Navbar
-          activeSection={activeSection}
-          onNavClick={scrollToSection}
-          isSuperAdmin={isSuperAdmin}
-          onLogout={handleLogout}
-        />
-      </header>
-      <main id="main-content" role="main" aria-label="Main content">
-        <About />
-        <Performers />
-        <Cards />
-        <Contact />
-        {isSuperAdmin && <Uploads />}
-        {isSuperAdmin && <CardManagement />}
-      </main>
-      <footer className="footer" role="contentinfo">
-        <p>&copy; 2026 RhodeyStark Events. All rights reserved.</p>
-      </footer>
-    </div>
+    <ToastProvider>
+      <div className="App">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        <header role="banner">
+          <Navbar
+            activeSection={activeSection}
+            onNavClick={scrollToSection}
+            isSuperAdmin={isSuperAdmin}
+            onLogout={handleLogout}
+          />
+        </header>
+        <main id="main-content" role="main" aria-label="Main content">
+          <About />
+          <Performers />
+          <Cards />
+          <Contact />
+          {isSuperAdmin && <Uploads />}
+          {isSuperAdmin && <CardManagement />}
+        </main>
+        <footer className="footer" role="contentinfo">
+          <p>&copy; 2026 RhodeyStark Events. All rights reserved.</p>
+        </footer>
+      </div>
+    </ToastProvider>
   );
 };
 
