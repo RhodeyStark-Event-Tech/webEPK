@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Navbar.css';
 
-const Navbar = ({ activeSection, onNavClick, isSuperAdmin }) => {
+const Navbar = ({ activeSection, onNavClick, isSuperAdmin, onLogout }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -58,6 +58,13 @@ const Navbar = ({ activeSection, onNavClick, isSuperAdmin }) => {
             </li>
           ))}
         </ul>
+        <button
+          className="logout-btn"
+          onClick={onLogout}
+          aria-label="Logout"
+        >
+          Logout
+        </button>
       </div>
     </nav>
   );

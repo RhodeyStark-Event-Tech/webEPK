@@ -22,6 +22,12 @@ const App = () => {
     setIsSuperAdmin(superAdmin);
   };
 
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setIsSuperAdmin(false);
+    setActiveSection('about');
+  };
+
   // Show login page if not authenticated
   if (!isAuthenticated) {
     return <LoginModal onSuccess={handleLoginSuccess} />;
@@ -37,6 +43,7 @@ const App = () => {
           activeSection={activeSection}
           onNavClick={scrollToSection}
           isSuperAdmin={isSuperAdmin}
+          onLogout={handleLogout}
         />
       </header>
       <main id="main-content" role="main" aria-label="Main content">
