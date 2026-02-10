@@ -32,6 +32,15 @@
   color: #666;
 }
 
+.cards-loading {
+  display: flex;
+  justify-content: center;
+}
+
+.cards-loading .spinner-text {
+  color: #666;
+}
+
 .cards-error {
   color: #dc3545;
 }

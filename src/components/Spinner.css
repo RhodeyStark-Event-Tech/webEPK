@@ -1,0 +1,108 @@
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.spinner {
+  position: relative;
+  display: inline-block;
+}
+
+/* Sizes */
+.spinner-small .spinner-circle {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.spinner-medium .spinner-circle {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+.spinner-large .spinner-circle {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+/* Spinner circle */
+.spinner-circle {
+  border-radius: 50%;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.2);
+  animation: spin 1s linear infinite;
+}
+
+/* Colors */
+.spinner-primary .spinner-circle {
+  border-top-color: #e94560;
+  border-color: rgba(233, 69, 96, 0.2);
+  border-top-color: #e94560;
+}
+
+.spinner-white .spinner-circle {
+  border-color: rgba(255, 255, 255, 0.2);
+  border-top-color: #fff;
+}
+
+.spinner-dark .spinner-circle {
+  border-color: rgba(26, 26, 46, 0.2);
+  border-top-color: #1a1a2e;
+}
+
+/* Text */
+.spinner-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin: 0;
+  text-align: center;
+}
+
+/* Dark theme text */
+.spinner-dark + .spinner-text,
+.spinner-container.light-theme .spinner-text {
+  color: #666;
+}
+
+/* Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Overlay spinner for saving states */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+/* Inline spinner for buttons */
+.spinner-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner-inline .spinner-circle {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}

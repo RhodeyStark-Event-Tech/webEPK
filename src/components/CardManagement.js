@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import VideoUpload from './VideoUpload';
 import Modal from './Modal';
+import Spinner from './Spinner';
 import { listFiles, formatFileSize } from '../firebase/storageService';
 import { getCards, createCard, updateCard, deleteCard } from '../firebase/cardService';
 import './CardManagement.css';
@@ -13,6 +14,7 @@ const CardManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Form state
   const [isEditing, setIsEditing] = useState(false);
@@ -169,12 +171,15 @@ const CardManagement = () => {
       return;
     }
 
+    setIsDeleting(true);
     try {
       await deleteCard(cardId);
       await fetchData();
     } catch (err) {
       console.error('Error deleting card:', err);
       alert(`Failed to delete card: ${err.message}`);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -387,7 +392,9 @@ const CardManagement = () => {
           <h3>Existing Cards</h3>
 
           {isLoading && (
-            <p className="loading-text">Loading cards...</p>
+            <div className="loading-container">
+              <Spinner size="medium" text="Loading cards..." />
+            </div>
           )}
 
           {error && (
@@ -480,6 +487,17 @@ const CardManagement = () => {
         onClose={handleCloseModal}
         media={selectedMedia}
       />
+
+      {/* Saving/Deleting Overlay */}
+      {(isSaving || isDeleting) && (
+        <div className="spinner-overlay">
+          <Spinner
+            size="large"
+            color="white"
+            text={isSaving ? 'Saving card...' : 'Deleting card...'}
+          />
+        </div>
+      )}
     </section>
   );
 };

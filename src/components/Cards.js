@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import Modal from './Modal';
+import Spinner from './Spinner';
 import { getCards } from '../firebase/cardService';
 import './Cards.css';
 
@@ -69,7 +70,7 @@ const Cards = () => {
 
         {isLoading && (
           <div className="cards-loading">
-            <p>Loading content...</p>
+            <Spinner size="large" color="dark" text="Loading content..." />
           </div>
         )}
 
