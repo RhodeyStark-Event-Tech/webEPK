@@ -2,7 +2,7 @@ import {
   collection,
   doc,
   getDocs,
-  addDoc,
+  setDoc,
   updateDoc,
   deleteDoc,
   query,
@@ -39,12 +39,14 @@ export const getCards = async () => {
 export const createCard = async (cardData) => {
   try {
     const cardsRef = collection(db, CARDS_COLLECTION);
-    const docRef = await addDoc(cardsRef, {
+    // Generate a unique ID
+    const newDocRef = doc(cardsRef);
+    await setDoc(newDocRef, {
       ...cardData,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
-    return { id: docRef.id, ...cardData };
+    return { id: newDocRef.id, ...cardData };
   } catch (error) {
     console.error('Error creating card:', error);
     throw error;
