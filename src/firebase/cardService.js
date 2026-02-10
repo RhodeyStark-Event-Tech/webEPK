@@ -11,11 +11,11 @@ import { db } from './config';
 const CARDS_COLLECTION = 'cards';
 
 // Timeout wrapper for Firestore operations
-const withTimeout = (promise, timeoutMs = 15000) => {
+const withTimeout = (promise, timeoutMs = 30000) => {
   return Promise.race([
     promise,
     new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Operation timed out. Please check your internet connection.')), timeoutMs)
+      setTimeout(() => reject(new Error('Operation timed out. Please check your internet connection and Firebase configuration.')), timeoutMs)
     )
   ]);
 };
@@ -56,19 +56,33 @@ export const createCard = async (cardData) => {
     const newDocRef = doc(cardsRef);
     const now = new Date().toISOString();
 
+    // Clean the data - remove any undefined or empty values
+    const cleanData = {};
+    Object.keys(cardData).forEach(key => {
+      if (cardData[key] !== undefined && cardData[key] !== '') {
+        cleanData[key] = cardData[key];
+      }
+    });
+
     const dataToSave = {
-      ...cardData,
+      ...cleanData,
       createdAt: now,
       updatedAt: now
     };
 
     console.log('Saving to Firestore:', dataToSave);
-    await withTimeout(setDoc(newDocRef, dataToSave));
-    console.log('Card saved successfully with ID:', newDocRef.id);
+    console.log('Document ID:', newDocRef.id);
+    console.log('Collection path:', cardsRef.path);
 
-    return { id: newDocRef.id, ...cardData };
+    const startTime = Date.now();
+    await withTimeout(setDoc(newDocRef, dataToSave));
+    console.log(`Card saved successfully in ${Date.now() - startTime}ms with ID:`, newDocRef.id);
+
+    return { id: newDocRef.id, ...cleanData };
   } catch (error) {
     console.error('Error creating card:', error);
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
     throw error;
   }
 };
