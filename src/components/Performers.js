@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Modal from './Modal';
+import Spinner from './Spinner';
+import OptimizedImage from './OptimizedImage';
 import { getPerformers } from '../firebase/performerService';
 import './Performers.css';
 
@@ -50,7 +52,9 @@ const Performers = () => {
         </p>
 
         {isLoading ? (
-          <p className="loading-text">Loading performers...</p>
+          <div className="performers-loading">
+            <Spinner size="large" color="dark" text="Loading performers..." />
+          </div>
         ) : (
           <div
             className="performers-grid"
@@ -66,10 +70,12 @@ const Performers = () => {
               >
                 <div className="performer-image" aria-hidden="true">
                   {photo ? (
-                    <img
+                    <OptimizedImage
                       src={photo.src}
                       alt={name}
-                      className="performer-photo"
+                      className="light-theme"
+                      placeholderColor="#e9ecef"
+                      aspectRatio="1/1"
                     />
                   ) : (
                     <div className="image-placeholder">

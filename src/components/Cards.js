@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import Modal from './Modal';
 import Spinner from './Spinner';
+import OptimizedImage from './OptimizedImage';
 import { getCards } from '../firebase/cardService';
 import './Cards.css';
 
@@ -109,7 +110,13 @@ const Cards = () => {
               >
                 <div className="promo-card-image">
                   {card.photo ? (
-                    <img src={card.photo.src} alt={card.title} />
+                    <OptimizedImage
+                      src={card.photo.src}
+                      alt={card.title}
+                      className="light-theme"
+                      placeholderColor="#e9ecef"
+                      aspectRatio="4/3"
+                    />
                   ) : (
                     <div className="promo-card-placeholder">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

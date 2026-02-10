@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import VideoUpload from './VideoUpload';
 import Modal from './Modal';
 import Spinner from './Spinner';
+import OptimizedImage from './OptimizedImage';
 import { listFiles, formatFileSize } from '../firebase/storageService';
 import { getCards, createCard, updateCard, deleteCard } from '../firebase/cardService';
 import './CardManagement.css';
@@ -411,7 +412,11 @@ const CardManagement = () => {
                 <div key={card.id} className="card-management-item">
                   <div className="card-thumbnail">
                     {card.photo ? (
-                      <img src={card.photo.src} alt={card.title} />
+                      <OptimizedImage
+                        src={card.photo.src}
+                        alt={card.title}
+                        aspectRatio="16/10"
+                      />
                     ) : (
                       <div className="card-placeholder">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

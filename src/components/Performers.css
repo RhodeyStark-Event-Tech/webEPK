@@ -82,6 +82,16 @@
   font-size: 1.1rem;
 }
 
+.performers-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.performers-loading .spinner-text {
+  color: #666;
+}
+
 .no-media-text {
   display: inline-block;
   color: #999;
