@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Navbar.css';
 
-const Navbar = ({ activeSection, onNavClick, onUploadsClick, isAuthenticated }) => {
+const Navbar = ({ activeSection, onNavClick, isSuperAdmin }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -15,16 +15,13 @@ const Navbar = ({ activeSection, onNavClick, onUploadsClick, isAuthenticated }) 
     { id: 'about', label: 'About' },
     { id: 'performers', label: 'Performers' },
     { id: 'contact', label: 'Contact' },
-    { id: 'uploads', label: 'Uploads', protected: true }
+    { id: 'uploads', label: 'Uploads', superAdminOnly: true }
   ];
 
-  const handleNavItemClick = (item) => {
-    if (item.protected && !isAuthenticated) {
-      onUploadsClick();
-    } else {
-      onNavClick(item.id);
-    }
-  };
+  // Filter nav items based on permissions
+  const visibleNavItems = navItems.filter(
+    item => !item.superAdminOnly || isSuperAdmin
+  );
 
   return (
     <nav
@@ -47,12 +44,12 @@ const Navbar = ({ activeSection, onNavClick, onUploadsClick, isAuthenticated }) 
           </button>
         </div>
         <ul className="navbar-menu" role="menubar" aria-label="Site sections">
-          {navItems.map((item) => (
+          {visibleNavItems.map((item) => (
             <li key={item.id} className="navbar-item" role="none">
               <button
                 role="menuitem"
                 className={`navbar-link ${activeSection === item.id ? 'active' : ''}`}
-                onClick={() => handleNavItemClick(item)}
+                onClick={() => onNavClick(item.id)}
                 aria-current={activeSection === item.id ? 'page' : undefined}
                 aria-label={`Navigate to ${item.label} section`}
               >

@@ -1,72 +1,48 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import './LoginModal.css';
 
-const LoginModal = ({ isOpen, onClose, onSuccess }) => {
+const LoginModal = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === 'Escape') {
-      onClose();
-    }
-  }, [onClose]);
-
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, handleKeyDown]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
+    // Super admin - full access including uploads
     if (email === 'omaurbliss@gmail.com' && password === '102078') {
-      onSuccess();
+      onSuccess({ isSuperAdmin: true });
       setEmail('');
       setPassword('');
-    } else {
-      setError('Invalid email or password');
+      return;
     }
+
+    // General admin - access to About, Performers, Contact (no uploads)
+    if (password === '54321') {
+      onSuccess({ isSuperAdmin: false });
+      setEmail('');
+      setPassword('');
+      return;
+    }
+
+    setError('Invalid email or password');
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div
-      className="login-modal-overlay"
-      onClick={handleBackdropClick}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="login-modal-title"
-    >
-      <div className="login-modal-content">
-        <button
-          className="login-modal-close"
-          onClick={onClose}
-          aria-label="Close login modal"
-        >
-          &times;
-        </button>
+    <div className="login-page">
+      <div className="login-container">
+        <div className="login-logo">
+          <img
+            src="/assets/RSlogo.png"
+            alt="RhodeyStark Events"
+            className="login-logo-image"
+          />
+        </div>
 
-        <h2 id="login-modal-title" className="login-modal-title">
-          Admin Login
-        </h2>
-        <p className="login-modal-description">
-          Please enter your credentials to access the uploads section.
+        <h1 className="login-title">Welcome</h1>
+        <p className="login-subtitle">
+          Please enter your credentials to continue
         </p>
 
         <form onSubmit={handleSubmit} className="login-form">
@@ -85,7 +61,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              aria-required="true"
+              placeholder="Enter your email"
             />
           </div>
 
@@ -98,12 +74,12 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              aria-required="true"
+              placeholder="Enter your password"
             />
           </div>
 
           <button type="submit" className="login-submit-btn">
-            Login
+            Sign In
           </button>
         </form>
       </div>

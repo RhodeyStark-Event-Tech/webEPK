@@ -9,29 +9,23 @@ import './App.css';
 
 const App = () => {
   const [activeSection, setActiveSection] = useState('about');
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
   const scrollToSection = (sectionId) => {
     setActiveSection(sectionId);
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleUploadsClick = () => {
-    setIsLoginModalOpen(true);
-  };
-
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = ({ isSuperAdmin: superAdmin }) => {
     setIsAuthenticated(true);
-    setIsLoginModalOpen(false);
-    setTimeout(() => {
-      scrollToSection('uploads');
-    }, 100);
+    setIsSuperAdmin(superAdmin);
   };
 
-  const handleLoginClose = () => {
-    setIsLoginModalOpen(false);
-  };
+  // Show login page if not authenticated
+  if (!isAuthenticated) {
+    return <LoginModal onSuccess={handleLoginSuccess} />;
+  }
 
   return (
     <div className="App">
@@ -42,25 +36,18 @@ const App = () => {
         <Navbar
           activeSection={activeSection}
           onNavClick={scrollToSection}
-          onUploadsClick={handleUploadsClick}
-          isAuthenticated={isAuthenticated}
+          isSuperAdmin={isSuperAdmin}
         />
       </header>
       <main id="main-content" role="main" aria-label="Main content">
         <About />
         <Performers />
         <Contact />
-        <Uploads isAuthenticated={isAuthenticated} />
+        {isSuperAdmin && <Uploads />}
       </main>
       <footer className="footer" role="contentinfo">
         <p>&copy; 2026 RhodeyStark Events. All rights reserved.</p>
       </footer>
-
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={handleLoginClose}
-        onSuccess={handleLoginSuccess}
-      />
     </div>
   );
 };

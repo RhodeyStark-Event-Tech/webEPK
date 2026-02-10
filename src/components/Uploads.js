@@ -11,7 +11,7 @@ import {
 } from '../firebase/performerService';
 import './Uploads.css';
 
-const Uploads = ({ isAuthenticated }) => {
+const Uploads = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [storedFiles, setStoredFiles] = useState([]);
@@ -20,10 +20,8 @@ const Uploads = ({ isAuthenticated }) => {
   const [isSaving, setIsSaving] = useState({});
   const [error, setError] = useState(null);
 
-  // Fetch files and performers from Firebase when authenticated
+  // Fetch files and performers from Firebase
   const fetchData = useCallback(async () => {
-    if (!isAuthenticated) return;
-
     setIsLoading(true);
     setError(null);
 
@@ -40,7 +38,7 @@ const Uploads = ({ isAuthenticated }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated]);
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -164,7 +162,7 @@ const Uploads = ({ isAuthenticated }) => {
   return (
     <section
       id="uploads"
-      className={`uploads-section ${isAuthenticated ? 'uploads-visible' : 'uploads-hidden'}`}
+      className="uploads-section"
       role="region"
       aria-labelledby="uploads-heading"
     >
