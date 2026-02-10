@@ -7,6 +7,20 @@ import { listFiles, formatFileSize } from '../firebase/storageService';
 import { getCards, createCard, updateCard, deleteCard } from '../firebase/cardService';
 import './CardManagement.css';
 
+// Helper to extract YouTube video ID from URL
+const getYouTubeVideoId = (url) => {
+  if (!url) return null;
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+    /youtube\.com\/shorts\/([^&\n?#]+)/
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+};
+
 const CardManagement = () => {
   const [cards, setCards] = useState([]);
   const [storedFiles, setStoredFiles] = useState([]);
@@ -25,7 +39,8 @@ const CardManagement = () => {
     description: '',
     category: '',
     photo: null,
-    media: null
+    media: null,
+    youtubeUrl: ''
   });
   const [showForm, setShowForm] = useState(false);
 
@@ -98,9 +113,20 @@ const CardManagement = () => {
           fullPath: file.fullPath,
           title: file.name.replace(/^\d+_/, '').replace(/\.[^/.]+$/, ''),
           description: `${file.type === 'video' ? 'Video' : 'Audio'} content`
-        }
+        },
+        youtubeUrl: '' // Clear YouTube URL when selecting uploaded media
       }));
     }
+  };
+
+  // Handle YouTube URL input
+  const handleYouTubeUrlChange = (e) => {
+    const url = e.target.value;
+    setFormData(prev => ({
+      ...prev,
+      youtubeUrl: url,
+      media: url ? null : prev.media // Clear uploaded media when entering YouTube URL
+    }));
   };
 
   // Handle new upload completion
@@ -115,7 +141,8 @@ const CardManagement = () => {
       description: '',
       category: '',
       photo: null,
-      media: null
+      media: null,
+      youtubeUrl: ''
     });
     setIsEditing(false);
     setEditingCardId(null);
@@ -135,7 +162,8 @@ const CardManagement = () => {
       description: card.description || '',
       category: card.category || '',
       photo: card.photo || null,
-      media: card.media || null
+      media: card.media || null,
+      youtubeUrl: card.youtubeUrl || ''
     });
     setIsEditing(true);
     setEditingCardId(card.id);
@@ -317,19 +345,19 @@ const CardManagement = () => {
                 </div>
 
                 <div className="form-field">
-                  <label htmlFor="card-media">Video/Audio</label>
+                  <label htmlFor="card-media">Audio (from uploads)</label>
                   <select
                     id="card-media"
                     value={formData.media?.fullPath || ''}
                     onChange={(e) => handleMediaSelect(e.target.value)}
-                    disabled={isSaving || mediaFiles.length === 0}
+                    disabled={isSaving || mediaFiles.length === 0 || formData.youtubeUrl}
                   >
                     <option value="">
-                      {mediaFiles.length === 0 ? 'No media uploaded' : 'Select media...'}
+                      {formData.youtubeUrl ? 'Using YouTube URL' : mediaFiles.length === 0 ? 'No media uploaded' : 'Select audio...'}
                     </option>
-                    {mediaFiles.map((file) => (
+                    {mediaFiles.filter(f => f.type === 'audio').map((file) => (
                       <option key={file.fullPath} value={file.fullPath}>
-                        {file.type === 'video' ? '🎬' : '🎵'} {file.name.replace(/^\d+_/, '')}
+                        🎵 {file.name.replace(/^\d+_/, '')}
                       </option>
                     ))}
                   </select>
@@ -349,6 +377,31 @@ const CardManagement = () => {
                     </div>
                   )}
                 </div>
+              </div>
+
+              <div className="form-field youtube-field">
+                <label htmlFor="card-youtube">YouTube Video URL</label>
+                <input
+                  id="card-youtube"
+                  type="url"
+                  name="youtubeUrl"
+                  value={formData.youtubeUrl}
+                  onChange={handleYouTubeUrlChange}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  disabled={isSaving}
+                />
+                {formData.youtubeUrl && getYouTubeVideoId(formData.youtubeUrl) && (
+                  <div className="youtube-preview">
+                    <img
+                      src={`https://img.youtube.com/vi/${getYouTubeVideoId(formData.youtubeUrl)}/mqdefault.jpg`}
+                      alt="YouTube thumbnail"
+                    />
+                    <span className="media-type-badge">YouTube Video</span>
+                  </div>
+                )}
+                {formData.youtubeUrl && !getYouTubeVideoId(formData.youtubeUrl) && (
+                  <p className="field-error">Invalid YouTube URL</p>
+                )}
               </div>
 
               <div className="form-actions">

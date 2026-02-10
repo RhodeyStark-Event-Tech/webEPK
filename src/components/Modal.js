@@ -33,6 +33,7 @@ const Modal = ({ isOpen, onClose, media }) => {
 
   const isVideo = media?.type === 'video';
   const isImage = media?.type === 'image';
+  const isYouTube = media?.type === 'youtube';
 
   return (
     <div
@@ -55,7 +56,18 @@ const Modal = ({ isOpen, onClose, media }) => {
           <h1 className="modal-description">{media.description}</h1>
         )}
 
-        {isImage ? (
+        {isYouTube ? (
+          <div className="youtube-container">
+            <iframe
+              src={`https://www.youtube.com/embed/${media.videoId}?autoplay=0&rel=0`}
+              title={media?.title || 'YouTube Video'}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="youtube-iframe"
+            />
+          </div>
+        ) : isImage ? (
           <div className="media-image-container">
             <img
               src={media?.src}
