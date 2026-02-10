@@ -469,7 +469,11 @@ const CardManagement = () => {
           <h3>Available Media Files</h3>
           <p className="section-hint">These files can be assigned to cards</p>
 
-          {storedFiles.length === 0 ? (
+          {isLoading ? (
+            <div className="loading-container">
+              <Spinner size="small" text="Loading files..." />
+            </div>
+          ) : storedFiles.length === 0 ? (
             <p className="no-files-text">No files uploaded yet.</p>
           ) : (
             <div className="files-list">
