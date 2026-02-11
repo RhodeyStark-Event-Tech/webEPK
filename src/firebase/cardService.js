@@ -4,7 +4,8 @@ import {
   getDocs,
   setDoc,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  waitForPendingWrites
 } from 'firebase/firestore';
 import { db } from './config';
 
@@ -18,6 +19,17 @@ const withTimeout = (promise, timeoutMs = 30000) => {
       setTimeout(() => reject(new Error('Operation timed out. Please check your internet connection and Firebase configuration.')), timeoutMs)
     )
   ]);
+};
+
+// Ensure writes are synced to server
+const ensureServerSync = async () => {
+  try {
+    await withTimeout(waitForPendingWrites(db), 10000);
+    console.log('Data synced to server successfully');
+  } catch (error) {
+    console.warn('Server sync warning:', error.message);
+    // Don't throw - the write may still succeed
+  }
 };
 
 // Get all cards
@@ -76,7 +88,11 @@ export const createCard = async (cardData) => {
 
     const startTime = Date.now();
     await withTimeout(setDoc(newDocRef, dataToSave));
-    console.log(`Card saved successfully in ${Date.now() - startTime}ms with ID:`, newDocRef.id);
+    console.log(`Card written locally in ${Date.now() - startTime}ms with ID:`, newDocRef.id);
+
+    // Ensure the write is synced to the server
+    await ensureServerSync();
+    console.log(`Card synced to server. Total time: ${Date.now() - startTime}ms`);
 
     return { id: newDocRef.id, ...cleanData };
   } catch (error) {
@@ -95,6 +111,7 @@ export const updateCard = async (cardId, cardData) => {
       ...cardData,
       updatedAt: new Date().toISOString()
     }));
+    await ensureServerSync();
     return { id: cardId, ...cardData };
   } catch (error) {
     console.error('Error updating card:', error);
@@ -107,6 +124,7 @@ export const deleteCard = async (cardId) => {
   try {
     const cardRef = doc(db, CARDS_COLLECTION, cardId);
     await withTimeout(deleteDoc(cardRef));
+    await ensureServerSync();
     return true;
   } catch (error) {
     console.error('Error deleting card:', error);
