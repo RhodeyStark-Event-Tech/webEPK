@@ -2,7 +2,7 @@ import {
   collection,
   doc,
   getDocs,
-  setDoc,
+  addDoc,
   updateDoc,
   deleteDoc,
   waitForPendingWrites
@@ -35,8 +35,10 @@ const ensureServerSync = async () => {
 // Get all cards
 export const getCards = async () => {
   try {
+    console.log('Fetching cards from Firestore...');
     const cardsRef = collection(db, CARDS_COLLECTION);
-    const snapshot = await getDocs(cardsRef);
+    const snapshot = await withTimeout(getDocs(cardsRef));
+    console.log('Fetched', snapshot.size, 'cards from Firestore');
 
     const cards = [];
     snapshot.forEach((doc) => {
@@ -65,7 +67,6 @@ export const createCard = async (cardData) => {
   try {
     console.log('Creating card with data:', cardData);
     const cardsRef = collection(db, CARDS_COLLECTION);
-    const newDocRef = doc(cardsRef);
     const now = new Date().toISOString();
 
     // Clean the data - remove any undefined or empty values
@@ -83,18 +84,18 @@ export const createCard = async (cardData) => {
     };
 
     console.log('Saving to Firestore:', dataToSave);
-    console.log('Document ID:', newDocRef.id);
     console.log('Collection path:', cardsRef.path);
 
     const startTime = Date.now();
-    await withTimeout(setDoc(newDocRef, dataToSave));
-    console.log(`Card written locally in ${Date.now() - startTime}ms with ID:`, newDocRef.id);
+    // Use addDoc instead of setDoc - it auto-generates the ID
+    const docRef = await withTimeout(addDoc(cardsRef, dataToSave));
+    console.log(`Card written in ${Date.now() - startTime}ms with ID:`, docRef.id);
 
     // Ensure the write is synced to the server
     await ensureServerSync();
     console.log(`Card synced to server. Total time: ${Date.now() - startTime}ms`);
 
-    return { id: newDocRef.id, ...cleanData };
+    return { id: docRef.id, ...cleanData };
   } catch (error) {
     console.error('Error creating card:', error);
     console.error('Error code:', error.code);
