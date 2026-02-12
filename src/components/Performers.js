@@ -28,7 +28,10 @@ const Performers = () => {
 
   const handleLearnMore = (performer) => {
     if (performer.media) {
-      setSelectedMedia(performer.media);
+      setSelectedMedia({
+        ...performer.media,
+        description: performer.name
+      });
       setIsModalOpen(true);
     }
   };
