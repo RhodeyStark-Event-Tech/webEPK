@@ -24,7 +24,7 @@ export const defaultPerformers = [
     },
     media: {
       type: 'video',
-      src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2Fyour-video.mp4?alt=media&token=YOUR_TOKEN',
+      src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2Fsessions%20mp4.mp4?alt=media&token=cff8da5c-288b-4f64-a7b5-cdf1e96e103b',
       title: 'The Sessions Performance',
       description: 'Live performance video'
     }
