@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
 import Modal from './Modal';
-import Spinner from './Spinner';
 import OptimizedImage from './OptimizedImage';
 import { getCards } from '../firebase/cardService';
 import './Cards.css';
@@ -85,8 +84,8 @@ const Cards = () => {
     setSelectedMedia(null);
   }, []);
 
-  // Hide the entire section if there are no cards (after loading completes)
-  if (!isLoading && !error && cards.length === 0) {
+  // Hide the entire section while loading or if there are no cards
+  if (isLoading || (!error && cards.length === 0)) {
     return null;
   }
 
@@ -102,12 +101,6 @@ const Cards = () => {
         <p className="cards-intro">
           Explore our latest promotions and announcements
         </p>
-
-        {isLoading && (
-          <div className="cards-loading">
-            <Spinner size="large" color="dark" text="Loading content..." />
-          </div>
-        )}
 
         {error && (
           <div className="cards-error">
