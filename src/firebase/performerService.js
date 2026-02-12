@@ -17,7 +17,17 @@ export const defaultPerformers = [
     id: 1,
     name: 'The Sessions',
     category: 'Live Music',
-    description: 'Versatile cover band specializing in rock, pop, and jazz classics.'
+    description: 'Versatile cover band specializing in rock, pop, and jazz classics.',
+    photo: {
+      src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2F2K0A2774_1.jpg?alt=media&token=9c8c88cc-4771-4251-9fff-e2c768b66424',
+      name: 'The Sessions'
+    },
+    media: {
+      type: 'video',
+      src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2Fyour-video.mp4?alt=media&token=YOUR_TOKEN',
+      title: 'The Sessions Performance',
+      description: 'Live performance video'
+    }
   },
   {
     id: 2,
@@ -63,19 +73,19 @@ export const getPerformers = async () => {
       storedPerformers[doc.id] = doc.data();
     });
 
-    // Merge with default performers
+    // Merge with default performers (Firestore data overrides defaults)
     return defaultPerformers.map((performer) => {
       const stored = storedPerformers[String(performer.id)];
       return {
         ...performer,
-        media: stored?.media || null,
-        photo: stored?.photo || null
+        media: stored?.media || performer.media || null,
+        photo: stored?.photo || performer.photo || null
       };
     });
   } catch (error) {
     console.error('Error getting performers:', error);
-    // Return defaults if Firestore fails
-    return defaultPerformers.map(p => ({ ...p, media: null, photo: null }));
+    // Return defaults if Firestore fails (preserving any hardcoded media/photo)
+    return defaultPerformers.map(p => ({ ...p, media: p.media || null, photo: p.photo || null }));
   }
 };
 
