@@ -1,8 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { Media, Player, controls } from 'react-media-player';
 import './Modal.css';
-
-const { PlayPause, MuteUnmute, Progress, SeekBar, Duration, CurrentTime, Volume } = controls;
 
 const Modal = ({ isOpen, onClose, media }) => {
   const handleKeyDown = useCallback((e) => {
@@ -75,25 +72,28 @@ const Modal = ({ isOpen, onClose, media }) => {
               className="media-image"
             />
           </div>
+        ) : isVideo ? (
+          <div className="media-player-container">
+            <video
+              src={media?.src}
+              className="media-video"
+              controls
+              controlsList="nodownload"
+              playsInline
+            >
+              Your browser does not support the video element.
+            </video>
+          </div>
         ) : (
           <div className="media-player-container">
-            <Media>
-              <div className="media-player">
-                <Player
-                  src={media?.src ?? ''}
-                  className={isVideo ? 'media-video' : 'media-audio'}
-                  autoPlay={false}
-                />
-                <div className="media-controls">
-                  <PlayPause className="media-control-btn" />
-                  <CurrentTime className="media-time" />
-                  <SeekBar className="media-seekbar" />
-                  <Duration className="media-time" />
-                  <MuteUnmute className="media-control-btn" />
-                  <Volume className="media-volume" />
-                </div>
-              </div>
-            </Media>
+            <audio
+              src={media?.src}
+              className="media-audio"
+              controls
+              controlsList="nodownload"
+            >
+              Your browser does not support the audio element.
+            </audio>
           </div>
         )}
 
