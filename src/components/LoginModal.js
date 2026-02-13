@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import Spinner from './Spinner';
 import './LoginModal.css';
 
 const LoginModal = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,14 +22,29 @@ const LoginModal = ({ onSuccess }) => {
 
     // General admin - access to About, Performers, Contact (no uploads)
     if (password === '54321') {
-      onSuccess({ isSuperAdmin: false });
-      setEmail('');
-      setPassword('');
+      setIsLoading(true);
+      // Simulate loading time for general admin
+      setTimeout(() => {
+        onSuccess({ isSuperAdmin: false });
+        setEmail('');
+        setPassword('');
+      }, 2500);
       return;
     }
 
     setError('Invalid email or password');
   };
+
+  if (isLoading) {
+    return (
+      <div className="login-loading-overlay">
+        <div className="login-loading-content">
+          <Spinner size="large" color="white" />
+          <p className="login-loading-text">loading talent...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-page">
