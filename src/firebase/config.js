@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
-import { initializeFirestore } from 'firebase/firestore';
+import { initializeFirestore, memoryLocalCache } from 'firebase/firestore';
 
 // Firebase configuration
 // Replace these values with your Firebase project config
@@ -20,9 +20,11 @@ const app = initializeApp(firebaseConfig);
 // Initialize Cloud Storage
 export const storage = getStorage(app);
 
-// Initialize Firestore with long polling to avoid WebSocket issues
+// Initialize Firestore with memory cache only (no offline persistence)
+// This forces all reads/writes to go directly to server
 export const db = initializeFirestore(app, {
-  experimentalForceLongPolling: true
+  experimentalForceLongPolling: true,
+  localCache: memoryLocalCache()
 });
 
 export default app;
