@@ -374,6 +374,30 @@
   }
 }
 
+/* Video placeholder when thumbnail generation fails */
+.video-placeholder {
+  position: relative;
+  background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);
+}
+
+.video-placeholder .placeholder-icon {
+  font-size: 1.5rem;
+  color: rgba(233, 69, 96, 0.8);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.video-placeholder .placeholder-initial {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+}
+
 .gallery-play-overlay {
   position: absolute;
   top: 0;

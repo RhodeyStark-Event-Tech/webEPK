@@ -2,64 +2,84 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import './Modal.css';
 
 // Component to generate thumbnail from video URL
-const VideoThumbnail = ({ src, alt, onLoad }) => {
+const VideoThumbnail = ({ src, alt }) => {
   const [thumbnail, setThumbnail] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [status, setStatus] = useState('loading'); // 'loading', 'ready', 'error'
   const videoRef = useRef(null);
-  const canvasRef = useRef(null);
 
   useEffect(() => {
+    // Create a video element to generate thumbnail
     const video = document.createElement('video');
-    const canvas = document.createElement('canvas');
     videoRef.current = video;
-    canvasRef.current = canvas;
 
-    video.crossOrigin = 'anonymous';
     video.muted = true;
     video.preload = 'metadata';
+    video.playsInline = true;
+
+    // Try with crossOrigin first for canvas access
+    let triedWithoutCors = false;
+
+    const attemptThumbnail = () => {
+      const canvas = document.createElement('canvas');
+      try {
+        canvas.width = video.videoWidth || 320;
+        canvas.height = video.videoHeight || 180;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        // Check if canvas was tainted
+        if (dataUrl && dataUrl !== 'data:,') {
+          setThumbnail(dataUrl);
+          setStatus('ready');
+        } else {
+          setStatus('error');
+        }
+      } catch (err) {
+        // Canvas tainted or other error
+        setStatus('error');
+      }
+    };
 
     const handleLoadedData = () => {
       // Seek to 1 second or 10% of duration, whichever is smaller
-      const seekTime = Math.min(1, video.duration * 0.1);
+      const seekTime = Math.min(1, video.duration * 0.1 || 0.5);
       video.currentTime = seekTime;
     };
 
     const handleSeeked = () => {
-      try {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        setThumbnail(dataUrl);
-        setIsLoading(false);
-        if (onLoad) onLoad(dataUrl);
-      } catch (err) {
-        console.error('Error generating thumbnail:', err);
-        setIsLoading(false);
-      }
+      attemptThumbnail();
     };
 
     const handleError = () => {
-      console.error('Error loading video for thumbnail');
-      setIsLoading(false);
+      if (!triedWithoutCors && video.crossOrigin) {
+        // Retry without crossOrigin - video will load but canvas will be tainted
+        triedWithoutCors = true;
+        video.crossOrigin = null;
+        video.src = src;
+      } else {
+        setStatus('error');
+      }
     };
 
     video.addEventListener('loadeddata', handleLoadedData);
     video.addEventListener('seeked', handleSeeked);
     video.addEventListener('error', handleError);
 
+    // Start with crossOrigin for clean canvas access
+    video.crossOrigin = 'anonymous';
     video.src = src;
 
     return () => {
       video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('seeked', handleSeeked);
       video.removeEventListener('error', handleError);
+      video.pause();
       video.src = '';
+      videoRef.current = null;
     };
-  }, [src, onLoad]);
+  }, [src]);
 
-  if (isLoading) {
+  if (status === 'loading') {
     return (
       <div className="thumbnail-loading">
         <div className="thumbnail-spinner"></div>
@@ -67,14 +87,16 @@ const VideoThumbnail = ({ src, alt, onLoad }) => {
     );
   }
 
-  if (thumbnail) {
+  if (status === 'ready' && thumbnail) {
     return <img src={thumbnail} alt={alt} className="video-thumbnail-img" />;
   }
 
-  // Fallback if thumbnail generation fails
+  // Fallback: show styled placeholder with video icon and title initial
+  const initial = alt ? alt.charAt(0).toUpperCase() : 'V';
   return (
-    <div className="gallery-placeholder">
-      🎬
+    <div className="gallery-placeholder video-placeholder">
+      <span className="placeholder-icon">▶</span>
+      <span className="placeholder-initial">{initial}</span>
     </div>
   );
 };
