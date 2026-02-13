@@ -3,36 +3,43 @@
 }
 
 .about-hero {
-  background: linear-gradient(rgba(26, 26, 46, 0.7), rgba(15, 52, 96, 0.8)),
+  background: linear-gradient(rgba(26, 26, 46, 0.6), rgba(15, 52, 96, 0.7)),
     url('https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2Frsbackground_collage%20(1).png?alt=media&token=c7b9a9dc-617e-44d6-9477-7ee4ea1b0a40');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
   color: #fff;
-  padding: 120px 30px 80px;
+  padding: 150px 30px 120px;
   text-align: center;
   position: relative;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .about-hero h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
+  font-size: 4.5rem;
+  margin-bottom: 25px;
   font-weight: 700;
   position: relative;
   z-index: 10;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
+  letter-spacing: 3px;
 }
 
 .tagline {
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   opacity: 1;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   position: relative;
   z-index: 10;
-  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
-  font-weight: 500;
-  letter-spacing: 2px;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+  letter-spacing: 4px;
 }
 
 .about-content {
@@ -99,16 +106,21 @@
 @media (max-width: 768px) {
   .about-hero {
     background-position: center top;
+    background-attachment: scroll;
+    min-height: 50vh;
+    padding: 100px 20px 80px;
   }
 
   .about-hero h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+    letter-spacing: 2px;
   }
 
   .tagline {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.7);
+    letter-spacing: 3px;
   }
 
   .about-text h2 {
