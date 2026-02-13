@@ -5,13 +5,20 @@ import OptimizedImage from './OptimizedImage';
 import { getPerformers } from '../firebase/performerService';
 import './Performers.css';
 
-const Performers = () => {
+const Performers = ({ initialData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
-  const [performers, setPerformers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [performers, setPerformers] = useState(initialData || []);
+  const [isLoading, setIsLoading] = useState(!initialData);
 
   useEffect(() => {
+    // Skip fetching if initialData was provided
+    if (initialData) {
+      setPerformers(initialData);
+      setIsLoading(false);
+      return;
+    }
+
     const fetchPerformers = async () => {
       try {
         const data = await getPerformers();
@@ -24,7 +31,7 @@ const Performers = () => {
     };
 
     fetchPerformers();
-  }, []);
+  }, [initialData]);
 
   const handleLearnMore = (performer) => {
     if (performer.media) {

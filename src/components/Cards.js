@@ -18,9 +18,9 @@ const getYouTubeVideoId = (url) => {
   return null;
 };
 
-const Cards = () => {
-  const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+const Cards = ({ initialData }) => {
+  const [cards, setCards] = useState(initialData || []);
+  const [isLoading, setIsLoading] = useState(!initialData);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
@@ -42,8 +42,15 @@ const Cards = () => {
   }, []);
 
   useEffect(() => {
+    // Skip fetching if initialData was provided
+    if (initialData) {
+      setCards(initialData);
+      setIsLoading(false);
+      return;
+    }
+
     fetchCards();
-  }, [fetchCards]);
+  }, [initialData, fetchCards]);
 
   // Handle card click to view media
   const handleCardClick = (card) => {
