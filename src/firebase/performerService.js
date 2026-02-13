@@ -22,12 +22,23 @@ export const defaultPerformers = [
       src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2F2K0A2774_1.jpg?alt=media&token=9c8c88cc-4771-4251-9fff-e2c768b66424',
       name: 'The Sessions'
     },
-    media: {
-      type: 'video',
-      src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2Fsessions%20mp4.mp4?alt=media&token=cff8da5c-288b-4f64-a7b5-cdf1e96e103b',
-      title: 'The Sessions Performance',
-      description: 'Live performance video'
-    }
+    mediaList: [
+      {
+        type: 'video',
+        src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2Fsessions%20mp4.mp4?alt=media&token=cff8da5c-288b-4f64-a7b5-cdf1e96e103b',
+        title: 'The Sessions Performance'
+      },
+      {
+        type: 'video',
+        src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2FSessions4PC.mp4?alt=media&token=a91b3c3c-fd57-4ecc-a074-7d1a722c0212',
+        title: 'Sessions 4c'
+      },
+      {
+        type: 'video',
+        src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2FSessions10pc.mp4?alt=media&token=d820a08e-cdf5-4236-98c8-6bc793122e51',
+        title: 'Sessions 10pc'
+      }
+    ]
   },
   {
     id: 2,
@@ -79,13 +90,14 @@ export const getPerformers = async () => {
       return {
         ...performer,
         media: stored?.media || performer.media || null,
+        mediaList: stored?.mediaList || performer.mediaList || null,
         photo: stored?.photo || performer.photo || null
       };
     });
   } catch (error) {
     console.error('Error getting performers:', error);
     // Return defaults if Firestore fails (preserving any hardcoded media/photo)
-    return defaultPerformers.map(p => ({ ...p, media: p.media || null, photo: p.photo || null }));
+    return defaultPerformers.map(p => ({ ...p, media: p.media || null, mediaList: p.mediaList || null, photo: p.photo || null }));
   }
 };
 

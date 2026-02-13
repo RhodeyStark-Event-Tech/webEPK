@@ -8,6 +8,8 @@ import './Performers.css';
 const Performers = ({ initialData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const [selectedMediaList, setSelectedMediaList] = useState(null);
+  const [modalTitle, setModalTitle] = useState('');
   const [performers, setPerformers] = useState(initialData || []);
   const [isLoading, setIsLoading] = useState(!initialData);
 
@@ -34,11 +36,23 @@ const Performers = ({ initialData }) => {
   }, [initialData]);
 
   const handleLearnMore = (performer) => {
+    setModalTitle(performer.name);
+
+    // Check for new mediaList format (multiple media)
+    if (performer.mediaList && performer.mediaList.length > 0) {
+      setSelectedMediaList(performer.mediaList);
+      setSelectedMedia(null);
+      setIsModalOpen(true);
+      return;
+    }
+
+    // Legacy support: single media
     if (performer.media) {
       setSelectedMedia({
         ...performer.media,
         description: performer.name
       });
+      setSelectedMediaList(null);
       setIsModalOpen(true);
     }
   };
@@ -46,6 +60,8 @@ const Performers = ({ initialData }) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedMedia(null);
+    setSelectedMediaList(null);
+    setModalTitle('');
   };
 
   return (
@@ -71,48 +87,51 @@ const Performers = ({ initialData }) => {
             role="list"
             aria-describedby="performers-description"
           >
-            {performers.map(({ id, name, category, description, media, photo }) => (
-              <article
-                key={id}
-                className="performer-card"
-                role="listitem"
-                aria-labelledby={`performer-name-${id}`}
-              >
-                <div className="performer-image" aria-hidden="true">
-                  {photo ? (
-                    <OptimizedImage
-                      src={photo.src}
-                      alt={name}
-                      className="light-theme"
-                      placeholderColor="#e9ecef"
-                      aspectRatio="1/1"
-                    />
-                  ) : (
-                    <div className="image-placeholder">
-                      <span>{name.charAt(0)}</span>
-                    </div>
-                  )}
-                </div>
-                <div className="performer-info">
-                  <span className="performer-category" aria-label={`Category: ${category}`}>
-                    {category}
-                  </span>
-                  <h3 id={`performer-name-${id}`}>{name}</h3>
-                  <p>{description}</p>
-                  {media ? (
-                    <button
-                      className="book-btn"
-                      onClick={() => handleLearnMore({ name, media })}
-                      aria-label={`Learn more about ${name}`}
-                    >
-                      Learn More
-                    </button>
-                  ) : (
-                    <span className="no-media-text">Media coming soon</span>
-                  )}
-                </div>
-              </article>
-            ))}
+            {performers.map(({ id, name, category, description, media, mediaList, photo }) => {
+              const hasMedia = (mediaList && mediaList.length > 0) || media;
+              return (
+                <article
+                  key={id}
+                  className="performer-card"
+                  role="listitem"
+                  aria-labelledby={`performer-name-${id}`}
+                >
+                  <div className="performer-image" aria-hidden="true">
+                    {photo ? (
+                      <OptimizedImage
+                        src={photo.src}
+                        alt={name}
+                        className="light-theme"
+                        placeholderColor="#e9ecef"
+                        aspectRatio="1/1"
+                      />
+                    ) : (
+                      <div className="image-placeholder">
+                        <span>{name.charAt(0)}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="performer-info">
+                    <span className="performer-category" aria-label={`Category: ${category}`}>
+                      {category}
+                    </span>
+                    <h3 id={`performer-name-${id}`}>{name}</h3>
+                    <p>{description}</p>
+                    {hasMedia ? (
+                      <button
+                        className="book-btn"
+                        onClick={() => handleLearnMore({ name, media, mediaList })}
+                        aria-label={`Learn more about ${name}`}
+                      >
+                        Learn More
+                      </button>
+                    ) : (
+                      <span className="no-media-text">Media coming soon</span>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
       </div>
@@ -121,6 +140,8 @@ const Performers = ({ initialData }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         media={selectedMedia}
+        mediaList={selectedMediaList}
+        title={modalTitle}
       />
     </section>
   );
