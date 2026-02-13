@@ -281,6 +281,151 @@
   transform: translateY(0);
 }
 
+/* Gallery Mode */
+.modal-content.gallery-mode {
+  max-width: 600px;
+}
+
+.media-gallery {
+  padding: 10px 0;
+}
+
+.gallery-hint {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.gallery-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  text-align: left;
+}
+
+.gallery-item:hover {
+  border-color: #e94560;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(233, 69, 96, 0.2);
+}
+
+.gallery-thumbnail {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.gallery-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
+}
+
+.gallery-play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-play-overlay {
+  opacity: 1;
+}
+
+.gallery-play-overlay svg {
+  width: 40px;
+  height: 40px;
+  color: #fff;
+}
+
+.gallery-item-title {
+  display: block;
+  padding: 10px 12px 5px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gallery-item-type {
+  display: block;
+  padding: 0 12px 10px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Audio Player with Thumbnail */
+.audio-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
+}
+
+.audio-thumbnail {
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.audio-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.audio-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  background: linear-gradient(135deg, #e94560 0%, #d63d56 100%);
+}
+
+.audio-player .media-audio {
+  width: 100%;
+  max-width: 400px;
+}
+
 @media (max-width: 768px) {
   .modal-content {
     padding: 20px;
@@ -303,5 +448,15 @@
 
   .media-volume {
     width: 60px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .audio-thumbnail {
+    width: 150px;
+    height: 150px;
   }
 }

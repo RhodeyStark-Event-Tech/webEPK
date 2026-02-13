@@ -24,6 +24,8 @@ const Cards = ({ initialData }) => {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const [selectedMediaList, setSelectedMediaList] = useState(null);
+  const [modalTitle, setModalTitle] = useState('');
 
   // Fetch cards from Firebase
   const fetchCards = useCallback(async () => {
@@ -54,34 +56,47 @@ const Cards = ({ initialData }) => {
 
   // Handle card click to view media
   const handleCardClick = (card) => {
-    // Check for YouTube URL first
+    setModalTitle(card.title);
+
+    // Check for new mediaList format (multiple media)
+    if (card.mediaList && card.mediaList.length > 0) {
+      setSelectedMediaList(card.mediaList);
+      setSelectedMedia(null);
+      setIsModalOpen(true);
+      return;
+    }
+
+    // Legacy support: Check for YouTube URL
     if (card.youtubeUrl) {
       const videoId = getYouTubeVideoId(card.youtubeUrl);
       if (videoId) {
         setSelectedMedia({
           type: 'youtube',
           videoId: videoId,
-          title: card.title,
-          description: card.title
+          youtubeId: videoId,
+          title: card.title
         });
+        setSelectedMediaList(null);
         setIsModalOpen(true);
         return;
       }
     }
 
+    // Legacy support: single media
     if (card.media) {
       setSelectedMedia({
         ...card.media,
-        description: card.title
+        title: card.media.title || card.title
       });
+      setSelectedMediaList(null);
       setIsModalOpen(true);
     } else if (card.photo) {
       setSelectedMedia({
         type: 'image',
         src: card.photo.src,
-        title: card.photo.name || card.title,
-        description: card.title
+        title: card.photo.name || card.title
       });
+      setSelectedMediaList(null);
       setIsModalOpen(true);
     }
   };
@@ -89,6 +104,8 @@ const Cards = ({ initialData }) => {
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setSelectedMedia(null);
+    setSelectedMediaList(null);
+    setModalTitle('');
   }, []);
 
   // Hide the entire section while loading or if there are no cards
@@ -118,8 +135,10 @@ const Cards = ({ initialData }) => {
         {cards.length > 0 && (
           <div className="cards-grid">
             {cards.map((card) => {
-              const hasMedia = card.media || card.photo || card.youtubeUrl;
+              const hasMediaList = card.mediaList && card.mediaList.length > 0;
+              const hasMedia = hasMediaList || card.media || card.photo || card.youtubeUrl;
               const hasYouTube = card.youtubeUrl && getYouTubeVideoId(card.youtubeUrl);
+              const mediaCount = card.mediaList?.length || 0;
 
               return (
                 <article
@@ -158,11 +177,14 @@ const Cards = ({ initialData }) => {
                         </svg>
                       </div>
                     )}
-                    {(card.media || hasYouTube) && (
+                    {(hasMediaList || card.media || hasYouTube) && (
                       <div className="media-overlay">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="play-icon">
                           <path d="M8 5v14l11-7z"/>
                         </svg>
+                        {mediaCount > 1 && (
+                          <span className="media-count-badge">{mediaCount}</span>
+                        )}
                       </div>
                     )}
                   </div>
@@ -181,7 +203,7 @@ const Cards = ({ initialData }) => {
                   {hasMedia && (
                     <div className="promo-card-action">
                       <span className="view-btn">
-                        {hasYouTube ? 'Watch Video' : card.media ? (card.media.type === 'video' ? 'Watch Video' : 'Listen Now') : 'View Image'}
+                        {mediaCount > 1 ? `View Media (${mediaCount})` : hasYouTube || card.mediaList?.[0]?.type === 'youtube' || card.mediaList?.[0]?.type === 'video' || card.media?.type === 'video' ? 'Watch Video' : card.mediaList?.[0]?.type === 'audio' || card.media?.type === 'audio' ? 'Listen Now' : 'View'}
                       </span>
                     </div>
                   )}
@@ -196,6 +218,8 @@ const Cards = ({ initialData }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         media={selectedMedia}
+        mediaList={selectedMediaList}
+        title={modalTitle}
       />
     </section>
   );

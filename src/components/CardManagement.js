@@ -41,7 +41,7 @@ const CardManagement = () => {
     description: '',
     category: '',
     photo: null,
-    media: null,
+    mediaList: [], // Array of media items
     youtubeUrl: ''
   });
   const [showForm, setShowForm] = useState(false);
@@ -100,24 +100,52 @@ const CardManagement = () => {
     }
   };
 
-  // Handle media selection from dropdown
-  const handleMediaSelect = (fileFullPath) => {
-    if (!fileFullPath) {
-      setFormData(prev => ({ ...prev, media: null }));
-      return;
-    }
+  // Handle adding media to the list
+  const handleAddMedia = (fileFullPath) => {
+    if (!fileFullPath) return;
+
     const file = storedFiles.find(f => f.fullPath === fileFullPath);
     if (file) {
+      // Check if already added
+      if (formData.mediaList.some(m => m.fullPath === file.fullPath)) {
+        toast.warning('This media is already added to the card.');
+        return;
+      }
+
+      const newMedia = {
+        type: file.type,
+        src: file.url,
+        fullPath: file.fullPath,
+        title: file.name.replace(/^\d+_/, '').replace(/\.[^/.]+$/, ''),
+        thumbnail: file.type === 'image' ? file.url : null
+      };
+
       setFormData(prev => ({
         ...prev,
-        media: {
-          type: file.type,
-          src: file.url,
-          fullPath: file.fullPath,
-          title: file.name.replace(/^\d+_/, '').replace(/\.[^/.]+$/, ''),
-          description: `${file.type === 'video' ? 'Video' : 'Audio'} content`
-        },
-        youtubeUrl: '' // Clear YouTube URL when selecting uploaded media
+        mediaList: [...prev.mediaList, newMedia]
+      }));
+    }
+  };
+
+  // Handle removing media from the list
+  const handleRemoveMedia = (fullPath) => {
+    setFormData(prev => ({
+      ...prev,
+      mediaList: prev.mediaList.filter(m => m.fullPath !== fullPath)
+    }));
+  };
+
+  // Handle setting thumbnail for a media item
+  const handleSetThumbnail = (mediaFullPath, thumbnailFullPath) => {
+    const thumbnailFile = storedFiles.find(f => f.fullPath === thumbnailFullPath);
+    if (thumbnailFile) {
+      setFormData(prev => ({
+        ...prev,
+        mediaList: prev.mediaList.map(m =>
+          m.fullPath === mediaFullPath
+            ? { ...m, thumbnail: thumbnailFile.url }
+            : m
+        )
       }));
     }
   };
@@ -127,8 +155,37 @@ const CardManagement = () => {
     const url = e.target.value;
     setFormData(prev => ({
       ...prev,
-      youtubeUrl: url,
-      media: url ? null : prev.media // Clear uploaded media when entering YouTube URL
+      youtubeUrl: url
+    }));
+  };
+
+  // Add YouTube video to media list
+  const handleAddYouTube = () => {
+    const videoId = getYouTubeVideoId(formData.youtubeUrl);
+    if (!videoId) {
+      toast.warning('Please enter a valid YouTube URL.');
+      return;
+    }
+
+    // Check if already added
+    if (formData.mediaList.some(m => m.youtubeId === videoId)) {
+      toast.warning('This YouTube video is already added.');
+      return;
+    }
+
+    const newMedia = {
+      type: 'youtube',
+      youtubeId: videoId,
+      src: `https://www.youtube.com/embed/${videoId}`,
+      thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
+      title: 'YouTube Video',
+      fullPath: `youtube-${videoId}`
+    };
+
+    setFormData(prev => ({
+      ...prev,
+      mediaList: [...prev.mediaList, newMedia],
+      youtubeUrl: ''
     }));
   };
 
@@ -144,7 +201,7 @@ const CardManagement = () => {
       description: '',
       category: '',
       photo: null,
-      media: null,
+      mediaList: [],
       youtubeUrl: ''
     });
     setIsEditing(false);
@@ -160,13 +217,32 @@ const CardManagement = () => {
 
   // Open form for editing existing card
   const handleEdit = (card) => {
+    // Convert legacy single media to array format
+    let mediaList = card.mediaList || [];
+    if (!mediaList.length && card.media) {
+      mediaList = [card.media];
+    }
+    if (!mediaList.length && card.youtubeUrl) {
+      const videoId = getYouTubeVideoId(card.youtubeUrl);
+      if (videoId) {
+        mediaList = [{
+          type: 'youtube',
+          youtubeId: videoId,
+          src: `https://www.youtube.com/embed/${videoId}`,
+          thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
+          title: 'YouTube Video',
+          fullPath: `youtube-${videoId}`
+        }];
+      }
+    }
+
     setFormData({
       title: card.title || '',
       description: card.description || '',
       category: card.category || '',
       photo: card.photo || null,
-      media: card.media || null,
-      youtubeUrl: card.youtubeUrl || ''
+      mediaList: mediaList,
+      youtubeUrl: ''
     });
     setIsEditing(true);
     setEditingCardId(card.id);
@@ -318,93 +394,130 @@ const CardManagement = () => {
                 />
               </div>
 
-              <div className="form-row">
-                <div className="form-field">
-                  <label htmlFor="card-photo">Photo</label>
-                  <select
-                    id="card-photo"
-                    value={formData.photo?.fullPath || ''}
-                    onChange={(e) => handlePhotoSelect(e.target.value)}
-                    disabled={isSaving || imageFiles.length === 0}
-                  >
-                    <option value="">
-                      {imageFiles.length === 0 ? 'No images uploaded' : 'Select a photo...'}
+              <div className="form-field">
+                <label htmlFor="card-photo">Card Cover Photo</label>
+                <select
+                  id="card-photo"
+                  value={formData.photo?.fullPath || ''}
+                  onChange={(e) => handlePhotoSelect(e.target.value)}
+                  disabled={isSaving || imageFiles.length === 0}
+                >
+                  <option value="">
+                    {imageFiles.length === 0 ? 'No images uploaded' : 'Select a photo...'}
+                  </option>
+                  {imageFiles.map((file) => (
+                    <option key={file.fullPath} value={file.fullPath}>
+                      {file.name.replace(/^\d+_/, '')}
                     </option>
-                    {imageFiles.map((file) => (
-                      <option key={file.fullPath} value={file.fullPath}>
-                        {file.name.replace(/^\d+_/, '')}
-                      </option>
-                    ))}
-                  </select>
-                  {formData.photo && (
-                    <div className="selected-preview">
-                      <img src={formData.photo.src} alt="Selected" />
-                      <button
-                        type="button"
-                        className="preview-btn"
-                        onClick={() => handlePreviewPhoto(formData.photo)}
-                      >
-                        Preview
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="form-field">
-                  <label htmlFor="card-media">Audio (from uploads)</label>
-                  <select
-                    id="card-media"
-                    value={formData.media?.fullPath || ''}
-                    onChange={(e) => handleMediaSelect(e.target.value)}
-                    disabled={isSaving || mediaFiles.length === 0 || formData.youtubeUrl}
-                  >
-                    <option value="">
-                      {formData.youtubeUrl ? 'Using YouTube URL' : mediaFiles.length === 0 ? 'No media uploaded' : 'Select audio...'}
-                    </option>
-                    {mediaFiles.filter(f => f.type === 'audio').map((file) => (
-                      <option key={file.fullPath} value={file.fullPath}>
-                        🎵 {file.name.replace(/^\d+_/, '')}
-                      </option>
-                    ))}
-                  </select>
-                  {formData.media && (
-                    <div className="selected-media-info">
-                      <span className="media-type-badge">
-                        {formData.media.type === 'video' ? '🎬 Video' : '🎵 Audio'}
-                      </span>
-                      <span className="media-title">{formData.media.title}</span>
-                      <button
-                        type="button"
-                        className="preview-btn"
-                        onClick={() => handlePreviewMedia(formData.media)}
-                      >
-                        Preview
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="form-field youtube-field">
-                <label htmlFor="card-youtube">YouTube Video URL</label>
-                <input
-                  id="card-youtube"
-                  type="url"
-                  name="youtubeUrl"
-                  value={formData.youtubeUrl}
-                  onChange={handleYouTubeUrlChange}
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  disabled={isSaving}
-                />
-                {formData.youtubeUrl && getYouTubeVideoId(formData.youtubeUrl) && (
-                  <div className="youtube-preview">
-                    <img
-                      src={`https://img.youtube.com/vi/${getYouTubeVideoId(formData.youtubeUrl)}/mqdefault.jpg`}
-                      alt="YouTube thumbnail"
-                    />
-                    <span className="media-type-badge">YouTube Video</span>
+                  ))}
+                </select>
+                {formData.photo && (
+                  <div className="selected-preview">
+                    <img src={formData.photo.src} alt="Selected" />
+                    <button
+                      type="button"
+                      className="preview-btn"
+                      onClick={() => handlePreviewPhoto(formData.photo)}
+                    >
+                      Preview
+                    </button>
                   </div>
                 )}
+              </div>
+
+              {/* Media List Section */}
+              <div className="form-field media-list-section">
+                <label>Media Items ({formData.mediaList.length})</label>
+                <p className="section-hint">Add videos or audio files to this card</p>
+
+                {/* Current media list */}
+                {formData.mediaList.length > 0 && (
+                  <div className="media-list-items">
+                    {formData.mediaList.map((media, index) => (
+                      <div key={media.fullPath} className="media-list-item">
+                        <div className="media-item-thumbnail">
+                          {media.thumbnail ? (
+                            <img src={media.thumbnail} alt={media.title} />
+                          ) : media.type === 'youtube' ? (
+                            <img src={`https://img.youtube.com/vi/${media.youtubeId}/mqdefault.jpg`} alt={media.title} />
+                          ) : (
+                            <div className="media-placeholder">
+                              {media.type === 'video' ? '🎬' : '🎵'}
+                            </div>
+                          )}
+                        </div>
+                        <div className="media-item-info">
+                          <span className="media-item-title">{media.title}</span>
+                          <span className="media-type-badge">
+                            {media.type === 'youtube' ? 'YouTube' : media.type === 'video' ? 'Video' : 'Audio'}
+                          </span>
+                        </div>
+                        {media.type !== 'youtube' && media.type !== 'image' && (
+                          <select
+                            className="thumbnail-select"
+                            value={media.thumbnail || ''}
+                            onChange={(e) => handleSetThumbnail(media.fullPath, e.target.value)}
+                          >
+                            <option value="">Select thumbnail...</option>
+                            {imageFiles.map((file) => (
+                              <option key={file.fullPath} value={file.fullPath}>
+                                {file.name.replace(/^\d+_/, '')}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                        <button
+                          type="button"
+                          className="remove-media-btn"
+                          onClick={() => handleRemoveMedia(media.fullPath)}
+                          aria-label="Remove media"
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Add from uploads */}
+                <div className="add-media-row">
+                  <select
+                    id="add-media"
+                    onChange={(e) => {
+                      handleAddMedia(e.target.value);
+                      e.target.value = '';
+                    }}
+                    disabled={isSaving || mediaFiles.length === 0}
+                  >
+                    <option value="">Add from uploads...</option>
+                    {mediaFiles.map((file) => (
+                      <option key={file.fullPath} value={file.fullPath}>
+                        {file.type === 'video' ? '🎬' : '🎵'} {file.name.replace(/^\d+_/, '')}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Add YouTube */}
+                <div className="add-youtube-row">
+                  <input
+                    id="card-youtube"
+                    type="url"
+                    name="youtubeUrl"
+                    value={formData.youtubeUrl}
+                    onChange={handleYouTubeUrlChange}
+                    placeholder="Paste YouTube URL and click Add..."
+                    disabled={isSaving}
+                  />
+                  <button
+                    type="button"
+                    className="add-youtube-btn"
+                    onClick={handleAddYouTube}
+                    disabled={isSaving || !formData.youtubeUrl}
+                  >
+                    Add YouTube
+                  </button>
+                </div>
                 {formData.youtubeUrl && !getYouTubeVideoId(formData.youtubeUrl) && (
                   <p className="field-error">Invalid YouTube URL</p>
                 )}
@@ -483,9 +596,9 @@ const CardManagement = () => {
                         </svg>
                       </div>
                     )}
-                    {card.media && (
+                    {(card.mediaList?.length > 0 || card.media) && (
                       <span className="media-indicator">
-                        {card.media.type === 'video' ? '🎬' : '🎵'}
+                        {card.mediaList?.length > 1 ? `📁 ${card.mediaList.length}` : card.mediaList?.[0]?.type === 'video' || card.mediaList?.[0]?.type === 'youtube' ? '🎬' : card.media?.type === 'video' ? '🎬' : '🎵'}
                       </span>
                     )}
                   </div>
