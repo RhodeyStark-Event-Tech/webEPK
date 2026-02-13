@@ -1,35 +1,8 @@
-import { useState, useCallback } from 'react';
 import './Contact.css';
 
-const initialFormState = {
-  name: '',
-  email: '',
-  phone: '',
-  eventType: '',
-  message: ''
-};
+const BOOKING_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScjkQJ-zXpR-GW-cXaXnpCyiX0vU_vemeCXL7g4weWQhfCKiA/viewform?usp=sharing&ouid=111455180566421488224';
 
 const Contact = () => {
-  const [formData, setFormData] = useState(initialFormState);
-
-  const handleChange = useCallback(({ target: { name, value } }) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for your inquiry! We will get back to you soon.');
-    setFormData(initialFormState);
-  };
-
-  const contactInfo = [
-    { title: 'Email', lines: ['bookings@servicepromo.com'] },
-    { title: 'Phone', lines: ['(555) 123-4567'] },
-    { title: 'Hours', lines: ['Monday - Friday: 9am - 6pm', 'Saturday: 10am - 4pm'] },
-    { title: 'Location', lines: ['123 Entertainment Blvd', 'Suite 100', 'Los Angeles, CA 90001'] }
-  ];
-
   return (
     <section
       id="contact"
@@ -43,109 +16,57 @@ const Contact = () => {
           Ready to book? Have questions? We'd love to hear from you!
         </p>
         <div className="contact-content">
-          <aside
+          <div
             className="contact-info"
             role="complementary"
             aria-label="Contact information"
           >
-            {contactInfo.map(({ title, lines }) => (
-              <address key={title} className="info-item">
-                <h3>{title}</h3>
-                {lines.map((line, idx) => (
-                  <p key={idx}>{line}</p>
-                ))}
-              </address>
-            ))}
-          </aside>
-          <form
-            className="contact-form"
-            onSubmit={handleSubmit}
-            aria-labelledby="contact-heading"
-            aria-describedby="contact-description"
-            noValidate
-          >
-            <div className="form-group">
-              <label htmlFor="name">
-                Name <span aria-hidden="true">*</span>
-                <span className="sr-only">(required)</span>
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                aria-required="true"
-                autoComplete="name"
-              />
+            <div className="info-item">
+              <div className="info-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+              </div>
+              <div className="info-content">
+                <h3>Email</h3>
+                <a href="mailto:info@rhodeystark.com" className="info-link">
+                  info@rhodeystark.com
+                </a>
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="email">
-                Email <span aria-hidden="true">*</span>
-                <span className="sr-only">(required)</span>
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                aria-required="true"
-                autoComplete="email"
-              />
+
+            <div className="info-item">
+              <div className="info-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+              </div>
+              <div className="info-content">
+                <h3>Website</h3>
+                <a
+                  href="https://www.rhodeystark.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="info-link"
+                >
+                  www.rhodeystark.com
+                </a>
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                autoComplete="tel"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="eventType">Event Type</label>
-              <select
-                id="eventType"
-                name="eventType"
-                value={formData.eventType}
-                onChange={handleChange}
-                aria-describedby="eventType-help"
-              >
-                <option value="">Select an event type</option>
-                <option value="wedding">Wedding</option>
-                <option value="corporate">Corporate Event</option>
-                <option value="private">Private Party</option>
-                <option value="festival">Festival/Concert</option>
-                <option value="other">Other</option>
-              </select>
-              <span id="eventType-help" className="sr-only">
-                Choose the type of event you are planning
-              </span>
-            </div>
-            <div className="form-group">
-              <label htmlFor="message">
-                Message <span aria-hidden="true">*</span>
-                <span className="sr-only">(required)</span>
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows="5"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                aria-required="true"
-              />
-            </div>
-            <button type="submit" className="submit-btn">
-              Send Message
-            </button>
-          </form>
+          </div>
+
+          <div className="contact-cta">
+            <p className="cta-text">Ready to make your event unforgettable?</p>
+            <a
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact-btn"
+              aria-label="Contact us - opens booking form in new tab"
+            >
+              Contact Us
+            </a>
+          </div>
         </div>
       </div>
     </section>
