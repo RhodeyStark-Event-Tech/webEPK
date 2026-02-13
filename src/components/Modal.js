@@ -1,5 +1,83 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import './Modal.css';
+
+// Component to generate thumbnail from video URL
+const VideoThumbnail = ({ src, alt, onLoad }) => {
+  const [thumbnail, setThumbnail] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const video = document.createElement('video');
+    const canvas = document.createElement('canvas');
+    videoRef.current = video;
+    canvasRef.current = canvas;
+
+    video.crossOrigin = 'anonymous';
+    video.muted = true;
+    video.preload = 'metadata';
+
+    const handleLoadedData = () => {
+      // Seek to 1 second or 10% of duration, whichever is smaller
+      const seekTime = Math.min(1, video.duration * 0.1);
+      video.currentTime = seekTime;
+    };
+
+    const handleSeeked = () => {
+      try {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        setThumbnail(dataUrl);
+        setIsLoading(false);
+        if (onLoad) onLoad(dataUrl);
+      } catch (err) {
+        console.error('Error generating thumbnail:', err);
+        setIsLoading(false);
+      }
+    };
+
+    const handleError = () => {
+      console.error('Error loading video for thumbnail');
+      setIsLoading(false);
+    };
+
+    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('seeked', handleSeeked);
+    video.addEventListener('error', handleError);
+
+    video.src = src;
+
+    return () => {
+      video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('seeked', handleSeeked);
+      video.removeEventListener('error', handleError);
+      video.src = '';
+    };
+  }, [src, onLoad]);
+
+  if (isLoading) {
+    return (
+      <div className="thumbnail-loading">
+        <div className="thumbnail-spinner"></div>
+      </div>
+    );
+  }
+
+  if (thumbnail) {
+    return <img src={thumbnail} alt={alt} className="video-thumbnail-img" />;
+  }
+
+  // Fallback if thumbnail generation fails
+  return (
+    <div className="gallery-placeholder">
+      🎬
+    </div>
+  );
+};
 
 const Modal = ({ isOpen, onClose, media, mediaList, title }) => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -183,6 +261,8 @@ const Modal = ({ isOpen, onClose, media, mediaList, title }) => {
                         src={`https://img.youtube.com/vi/${item.youtubeId}/mqdefault.jpg`}
                         alt={item.title}
                       />
+                    ) : item.type === 'video' && item.src ? (
+                      <VideoThumbnail src={item.src} alt={item.title} />
                     ) : (
                       <div className="gallery-placeholder">
                         {item.type === 'video' ? '🎬' : '🎵'}
