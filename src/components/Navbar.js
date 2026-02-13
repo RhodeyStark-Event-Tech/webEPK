@@ -14,7 +14,7 @@ const Navbar = ({ activeSection, onNavClick, isSuperAdmin, onLogout }) => {
   const navItems = [
     { id: 'about', label: 'About' },
     { id: 'performers', label: 'Performers' },
-    { id: 'cards', label: 'Cards' },
+    { id: 'cards', label: 'Cards', superAdminOnly: true },
     { id: 'contact', label: 'Contact' },
     { id: 'uploads', label: 'Uploads', superAdminOnly: true },
     { id: 'card-management', label: 'Manage Cards', superAdminOnly: true }
