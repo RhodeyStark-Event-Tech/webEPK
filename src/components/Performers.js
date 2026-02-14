@@ -72,7 +72,7 @@ const Performers = ({ initialData }) => {
       aria-labelledby="performers-heading"
     >
       <div className="performers-container">
-        <h2 id="performers-heading">Our Performers</h2>
+        <h2 id="performers-heading">Performers</h2>
         <p className="performers-intro" id="performers-description">
           Discover our talented roster of performers ready to bring your event to life.
         </p>
