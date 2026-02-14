@@ -46,7 +46,7 @@
   padding: 0 30px;
 }
 
-/* Title starts at 6rem, grows from 10s to 15s (1rem/sec = 5rem total) */
+/* Title stays at 6rem throughout */
 .hero-title {
   font-size: 6rem;
   font-weight: 700;
@@ -54,7 +54,6 @@
   text-shadow: 4px 4px 25px rgba(0, 0, 0, 0.9);
   position: relative;
   z-index: 25;
-  animation: titleGrow 15s linear infinite;
 }
 
 .tagline {
@@ -87,36 +86,6 @@
 /* KNOWLEDGABLE. appears at 9s, fades in over 2 seconds */
 .tagline-knowledgable {
   animation: knowledgableAppear 15s ease-out infinite;
-}
-
-/* Title grows gradually from 6rem to 11rem between 10s-15s (66%-100% of loop) */
-@keyframes titleGrow {
-  0%, 66% {
-    font-size: 6rem;
-    letter-spacing: 4px;
-    text-shadow: 4px 4px 25px rgba(0, 0, 0, 0.9);
-  }
-  73% {
-    font-size: 7rem;
-    letter-spacing: 5px;
-  }
-  80% {
-    font-size: 8rem;
-    letter-spacing: 6px;
-  }
-  87% {
-    font-size: 9rem;
-    letter-spacing: 7px;
-  }
-  93% {
-    font-size: 10rem;
-    letter-spacing: 8px;
-  }
-  100% {
-    font-size: 11rem;
-    letter-spacing: 10px;
-    text-shadow: 6px 6px 40px rgba(0, 0, 0, 1), 0 0 80px rgba(233, 69, 96, 0.4);
-  }
 }
 
 /* FUN - appears at 3s (20%), fully visible by 5s (33%) */
@@ -256,32 +225,6 @@
     font-size: 1.2rem;
     letter-spacing: 3px;
     margin: 0 5px;
-  }
-
-  /* Smaller, gradual growth on mobile */
-  @keyframes titleGrow {
-    0%, 66% {
-      font-size: 3rem;
-      letter-spacing: 2px;
-      text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.9);
-    }
-    75% {
-      font-size: 3.5rem;
-      letter-spacing: 3px;
-    }
-    85% {
-      font-size: 4rem;
-      letter-spacing: 4px;
-    }
-    93% {
-      font-size: 4.5rem;
-      letter-spacing: 5px;
-    }
-    100% {
-      font-size: 5rem;
-      letter-spacing: 6px;
-      text-shadow: 4px 4px 25px rgba(0, 0, 0, 1), 0 0 50px rgba(233, 69, 96, 0.4);
-    }
   }
 
   .about-text h2 {
