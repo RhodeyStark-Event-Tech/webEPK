@@ -32,73 +32,142 @@
   right: 0;
   bottom: 0;
   background: linear-gradient(
-    rgba(26, 26, 46, 0.55),
-    rgba(15, 52, 96, 0.6)
+    rgba(26, 26, 46, 0.65),
+    rgba(15, 52, 96, 0.7)
   );
   z-index: 2;
 }
 
 .hero-text {
   position: relative;
-  z-index: 10;
+  z-index: 20;
   text-align: center;
   color: #fff;
   padding: 0 30px;
 }
 
-/* Title animation - grows over 15s loop */
+/* Title starts at 6rem, grows from 10s to 15s (1rem/sec = 5rem total) */
 .hero-title {
-  font-size: 5rem;
+  font-size: 6rem;
   font-weight: 700;
   letter-spacing: 4px;
-  text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
-  animation: titleGrow 15s ease-in-out infinite;
+  text-shadow: 4px 4px 25px rgba(0, 0, 0, 0.9);
+  position: relative;
+  z-index: 25;
+  animation: titleGrow 15s ease-out infinite;
 }
 
 .tagline {
-  font-size: 2rem;
+  margin-top: 25px;
+  position: relative;
+  z-index: 25;
+}
+
+.tagline-word {
+  display: inline-block;
+  font-size: 2.2rem;
   font-weight: 600;
   letter-spacing: 5px;
-  text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.7);
-  margin-top: 20px;
-  animation: taglineGrow 15s ease-in-out infinite;
+  text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
+  margin: 0 10px;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-/* Title grows from 5rem to 6.5rem */
+/* FUN. appears at 3s (20% of 15s) */
+.tagline-fun {
+  animation: wordAppear 15s ease-out infinite;
+  animation-delay: 0s;
+}
+
+/* EASY. appears at 6s (40% of 15s) */
+.tagline-easy {
+  animation: wordAppear 15s ease-out infinite;
+  animation-delay: 0s;
+}
+
+/* KNOWLEDGABLE. appears at 9s (60% of 15s) */
+.tagline-knowledgable {
+  animation: wordAppear 15s ease-out infinite;
+  animation-delay: 0s;
+}
+
+/* Title grows from 6rem to 11rem between 10s-15s (66%-100% of loop) */
 @keyframes titleGrow {
   0% {
-    font-size: 5rem;
+    font-size: 6rem;
     letter-spacing: 4px;
-    text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
+    text-shadow: 4px 4px 25px rgba(0, 0, 0, 0.9);
   }
-  80% {
-    font-size: 6.5rem;
-    letter-spacing: 8px;
-    text-shadow: 5px 5px 30px rgba(0, 0, 0, 0.9), 0 0 60px rgba(233, 69, 96, 0.3);
+  66% {
+    font-size: 6rem;
+    letter-spacing: 4px;
+    text-shadow: 4px 4px 25px rgba(0, 0, 0, 0.9);
   }
   100% {
-    font-size: 5rem;
-    letter-spacing: 4px;
-    text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
+    font-size: 11rem;
+    letter-spacing: 10px;
+    text-shadow: 6px 6px 40px rgba(0, 0, 0, 1), 0 0 80px rgba(233, 69, 96, 0.4);
   }
 }
 
-/* Tagline grows from 2rem to 2.8rem */
-@keyframes taglineGrow {
-  0% {
-    font-size: 2rem;
-    letter-spacing: 5px;
-    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.7);
+/* Word appear animation with staggered timing built in */
+@keyframes wordAppear {
+  0%, 19% {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  80% {
-    font-size: 2.8rem;
-    letter-spacing: 10px;
-    text-shadow: 4px 4px 25px rgba(0, 0, 0, 0.9), 0 0 50px rgba(233, 69, 96, 0.3);
+  20%, 100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  100% {
-    font-size: 2rem;
-    letter-spacing: 5px;
-    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Override for FUN - appears at 3s = 20% */
+.tagline-fun {
+  animation-name: funAppear;
+}
+
+@keyframes funAppear {
+  0%, 19% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  20%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Override for EASY - appears at 6s = 40% */
+.tagline-easy {
+  animation-name: easyAppear;
+}
+
+@keyframes easyAppear {
+  0%, 39% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  40%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Override for KNOWLEDGABLE - appears at 9s = 60% */
+.tagline-knowledgable {
+  animation-name: knowledgableAppear;
+}
+
+@keyframes knowledgableAppear {
+  0%, 59% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  60%, 100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -171,49 +240,32 @@
   }
 
   .hero-title {
-    font-size: 2.8rem;
+    font-size: 3rem;
     letter-spacing: 2px;
   }
 
-  .tagline {
-    font-size: 1.3rem;
+  .tagline-word {
+    font-size: 1.2rem;
     letter-spacing: 3px;
+    margin: 0 5px;
   }
 
-  /* Smaller growth range on mobile */
+  /* Smaller growth on mobile */
   @keyframes titleGrow {
     0% {
-      font-size: 2.8rem;
+      font-size: 3rem;
       letter-spacing: 2px;
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+      text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.9);
     }
-    80% {
-      font-size: 3.5rem;
-      letter-spacing: 5px;
-      text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(233, 69, 96, 0.3);
+    66% {
+      font-size: 3rem;
+      letter-spacing: 2px;
+      text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.9);
     }
     100% {
-      font-size: 2.8rem;
-      letter-spacing: 2px;
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
-    }
-  }
-
-  @keyframes taglineGrow {
-    0% {
-      font-size: 1.3rem;
-      letter-spacing: 3px;
-      text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.7);
-    }
-    80% {
-      font-size: 1.8rem;
+      font-size: 5rem;
       letter-spacing: 6px;
-      text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.9), 0 0 30px rgba(233, 69, 96, 0.3);
-    }
-    100% {
-      font-size: 1.3rem;
-      letter-spacing: 3px;
-      text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.7);
+      text-shadow: 4px 4px 25px rgba(0, 0, 0, 1), 0 0 50px rgba(233, 69, 96, 0.4);
     }
   }
 
