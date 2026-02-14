@@ -54,7 +54,7 @@
   text-shadow: 4px 4px 25px rgba(0, 0, 0, 0.9);
   position: relative;
   z-index: 25;
-  animation: titleGrow 15s ease-out infinite;
+  animation: titleGrow 15s linear infinite;
 }
 
 .tagline {
@@ -74,35 +74,43 @@
   transform: translateY(20px);
 }
 
-/* FUN. appears at 3s (20% of 15s) */
+/* FUN. appears at 3s, fades in over 2 seconds */
 .tagline-fun {
-  animation: wordAppear 15s ease-out infinite;
-  animation-delay: 0s;
+  animation: funAppear 15s ease-out infinite;
 }
 
-/* EASY. appears at 6s (40% of 15s) */
+/* EASY. appears at 6s, fades in over 2 seconds */
 .tagline-easy {
-  animation: wordAppear 15s ease-out infinite;
-  animation-delay: 0s;
+  animation: easyAppear 15s ease-out infinite;
 }
 
-/* KNOWLEDGABLE. appears at 9s (60% of 15s) */
+/* KNOWLEDGABLE. appears at 9s, fades in over 2 seconds */
 .tagline-knowledgable {
-  animation: wordAppear 15s ease-out infinite;
-  animation-delay: 0s;
+  animation: knowledgableAppear 15s ease-out infinite;
 }
 
-/* Title grows from 6rem to 11rem between 10s-15s (66%-100% of loop) */
+/* Title grows gradually from 6rem to 11rem between 10s-15s (66%-100% of loop) */
 @keyframes titleGrow {
-  0% {
+  0%, 66% {
     font-size: 6rem;
     letter-spacing: 4px;
     text-shadow: 4px 4px 25px rgba(0, 0, 0, 0.9);
   }
-  66% {
-    font-size: 6rem;
-    letter-spacing: 4px;
-    text-shadow: 4px 4px 25px rgba(0, 0, 0, 0.9);
+  73% {
+    font-size: 7rem;
+    letter-spacing: 5px;
+  }
+  80% {
+    font-size: 8rem;
+    letter-spacing: 6px;
+  }
+  87% {
+    font-size: 9rem;
+    letter-spacing: 7px;
+  }
+  93% {
+    font-size: 10rem;
+    letter-spacing: 8px;
   }
   100% {
     font-size: 11rem;
@@ -111,61 +119,61 @@
   }
 }
 
-/* Word appear animation with staggered timing built in */
-@keyframes wordAppear {
-  0%, 19% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  20%, 100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Override for FUN - appears at 3s = 20% */
-.tagline-fun {
-  animation-name: funAppear;
-}
-
+/* FUN - appears at 3s (20%), fully visible by 5s (33%) */
 @keyframes funAppear {
   0%, 19% {
     opacity: 0;
     transform: translateY(20px);
   }
-  20%, 100% {
+  20% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  33% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Override for EASY - appears at 6s = 40% */
-.tagline-easy {
-  animation-name: easyAppear;
-}
-
+/* EASY - appears at 6s (40%), fully visible by 8s (53%) */
 @keyframes easyAppear {
   0%, 39% {
     opacity: 0;
     transform: translateY(20px);
   }
-  40%, 100% {
+  40% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  53% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Override for KNOWLEDGABLE - appears at 9s = 60% */
-.tagline-knowledgable {
-  animation-name: knowledgableAppear;
-}
-
+/* KNOWLEDGABLE - appears at 9s (60%), fully visible by 11s (73%) */
 @keyframes knowledgableAppear {
   0%, 59% {
     opacity: 0;
     transform: translateY(20px);
   }
-  60%, 100% {
+  60% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  73% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
@@ -250,17 +258,24 @@
     margin: 0 5px;
   }
 
-  /* Smaller growth on mobile */
+  /* Smaller, gradual growth on mobile */
   @keyframes titleGrow {
-    0% {
+    0%, 66% {
       font-size: 3rem;
       letter-spacing: 2px;
       text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.9);
     }
-    66% {
-      font-size: 3rem;
-      letter-spacing: 2px;
-      text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.9);
+    75% {
+      font-size: 3.5rem;
+      letter-spacing: 3px;
+    }
+    85% {
+      font-size: 4rem;
+      letter-spacing: 4px;
+    }
+    93% {
+      font-size: 4.5rem;
+      letter-spacing: 5px;
     }
     100% {
       font-size: 5rem;
