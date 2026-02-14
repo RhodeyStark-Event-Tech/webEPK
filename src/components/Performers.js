@@ -11,6 +11,7 @@ const Performers = ({ initialData }) => {
   const [selectedMediaList, setSelectedMediaList] = useState(null);
   const [modalTitle, setModalTitle] = useState('');
   const [modalDescription, setModalDescription] = useState('');
+  const [modalTestimonial, setModalTestimonial] = useState('');
   const [performers, setPerformers] = useState(initialData || []);
   const [isLoading, setIsLoading] = useState(!initialData);
 
@@ -39,6 +40,7 @@ const Performers = ({ initialData }) => {
   const handleLearnMore = (performer) => {
     setModalTitle(performer.name);
     setModalDescription(performer.description);
+    setModalTestimonial(performer.testimonial || '');
 
     // Check for new mediaList format (multiple media)
     if (performer.mediaList && performer.mediaList.length > 0) {
@@ -65,6 +67,7 @@ const Performers = ({ initialData }) => {
     setSelectedMediaList(null);
     setModalTitle('');
     setModalDescription('');
+    setModalTestimonial('');
   };
 
   return (
@@ -90,7 +93,7 @@ const Performers = ({ initialData }) => {
             role="list"
             aria-describedby="performers-description"
           >
-            {performers.map(({ id, name, category, description, media, mediaList, photo }) => {
+            {performers.map(({ id, name, category, description, media, mediaList, photo, testimonial }) => {
               const hasMedia = (mediaList && mediaList.length > 0) || media;
               return (
                 <article
@@ -119,7 +122,7 @@ const Performers = ({ initialData }) => {
                     {hasMedia && (
                       <button
                         className="more-btn"
-                        onClick={() => handleLearnMore({ name, description, media, mediaList })}
+                        onClick={() => handleLearnMore({ name, description, media, mediaList, testimonial })}
                         aria-label={`View more about ${name}`}
                       >
                         More
@@ -140,6 +143,7 @@ const Performers = ({ initialData }) => {
         mediaList={selectedMediaList}
         title={modalTitle}
         description={modalDescription}
+        testimonial={modalTestimonial}
       />
     </section>
   );

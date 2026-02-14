@@ -38,6 +38,13 @@
   margin-bottom: 20px;
 }
 
+.field-hint {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  margin-top: 5px;
+  font-style: italic;
+}
+
 /* Upload Section */
 .upload-section {
   margin-bottom: 50px;

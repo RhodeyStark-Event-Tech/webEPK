@@ -39,6 +39,7 @@ const CardManagement = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    testimonial: '',
     category: '',
     photo: null,
     mediaList: [], // Array of media items
@@ -199,6 +200,7 @@ const CardManagement = () => {
     setFormData({
       title: '',
       description: '',
+      testimonial: '',
       category: '',
       photo: null,
       mediaList: [],
@@ -239,6 +241,7 @@ const CardManagement = () => {
     setFormData({
       title: card.title || '',
       description: card.description || '',
+      testimonial: card.testimonial || '',
       category: card.category || '',
       photo: card.photo || null,
       mediaList: mediaList,
@@ -392,6 +395,20 @@ const CardManagement = () => {
                   rows={4}
                   disabled={isSaving}
                 />
+              </div>
+
+              <div className="form-field">
+                <label htmlFor="card-testimonial">Testimonial</label>
+                <textarea
+                  id="card-testimonial"
+                  name="testimonial"
+                  value={formData.testimonial}
+                  onChange={handleInputChange}
+                  placeholder="Enter a testimonial quote (optional)"
+                  rows={3}
+                  disabled={isSaving}
+                />
+                <p className="field-hint">This will appear as a quote below the description in the modal</p>
               </div>
 
               <div className="form-field">

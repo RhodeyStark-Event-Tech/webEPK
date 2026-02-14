@@ -18,6 +18,7 @@ export const defaultPerformers = [
     name: 'The Sessions',
     category: 'Live Music',
     description: 'Versatile cover band specializing in rock, pop, and jazz classics.',
+    testimonial: '',
     photo: {
       src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2F2K0A2774_1.jpg?alt=media&token=9c8c88cc-4771-4251-9fff-e2c768b66424',
       name: 'The Sessions'
@@ -44,31 +45,36 @@ export const defaultPerformers = [
     id: 2,
     name: 'NOSTALGIA',
     category: 'Live Music',
-    description: 'The finest vocalists and instrumentalists playing the greatest hits of all time. Guaranteed to get everyone on the dance floor.'
+    description: 'The finest vocalists and instrumentalists playing the greatest hits of all time. Guaranteed to get everyone on the dance floor.',
+    testimonial: ''
   },
   {
     id: 3,
     name: 'Dynamic Duo DJs',
     category: 'DJ Services',
-    description: 'High-energy DJ team keeping the dance floor packed all night long.'
+    description: 'High-energy DJ team keeping the dance floor packed all night long.',
+    testimonial: ''
   },
   {
     id: 4,
     name: 'Spark Entertainment',
     category: 'Fire Performance',
-    description: 'Mesmerizing fire dancers and LED performers for spectacular shows.'
+    description: 'Mesmerizing fire dancers and LED performers for spectacular shows.',
+    testimonial: ''
   },
   {
     id: 5,
     name: 'Comedy Kings',
     category: 'Stand-up Comedy',
-    description: 'Professional comedians delivering clean, crowd-pleasing humor.'
+    description: 'Professional comedians delivering clean, crowd-pleasing humor.',
+    testimonial: ''
   },
   {
     id: 6,
     name: 'String Quartet Elegance',
     category: 'Classical Music',
-    description: 'Sophisticated classical ensemble perfect for formal occasions.'
+    description: 'Sophisticated classical ensemble perfect for formal occasions.',
+    testimonial: ''
   }
 ];
 
@@ -91,13 +97,14 @@ export const getPerformers = async () => {
         ...performer,
         media: stored?.media || performer.media || null,
         mediaList: stored?.mediaList || performer.mediaList || null,
-        photo: stored?.photo || performer.photo || null
+        photo: stored?.photo || performer.photo || null,
+        testimonial: stored?.testimonial || performer.testimonial || ''
       };
     });
   } catch (error) {
     console.error('Error getting performers:', error);
     // Return defaults if Firestore fails (preserving any hardcoded media/photo)
-    return defaultPerformers.map(p => ({ ...p, media: p.media || null, mediaList: p.mediaList || null, photo: p.photo || null }));
+    return defaultPerformers.map(p => ({ ...p, media: p.media || null, mediaList: p.mediaList || null, photo: p.photo || null, testimonial: p.testimonial || '' }));
   }
 };
 

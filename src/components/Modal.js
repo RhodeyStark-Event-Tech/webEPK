@@ -101,7 +101,7 @@ const VideoThumbnail = ({ src, alt }) => {
   );
 };
 
-const Modal = ({ isOpen, onClose, media, mediaList, title, description }) => {
+const Modal = ({ isOpen, onClose, media, mediaList, title, description, testimonial }) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   // Reset selected item when modal closes
@@ -267,6 +267,13 @@ const Modal = ({ isOpen, onClose, media, mediaList, title, description }) => {
         {/* Description */}
         {description && (
           <p className="modal-description">{description}</p>
+        )}
+
+        {/* Testimonial */}
+        {testimonial && (
+          <blockquote className="modal-testimonial">
+            <p>"{testimonial}"</p>
+          </blockquote>
         )}
 
         {/* Gallery View */}
