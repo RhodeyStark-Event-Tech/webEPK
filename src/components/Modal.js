@@ -265,7 +265,7 @@ const Modal = ({ isOpen, onClose, media, mediaList, title, description }) => {
         )}
 
         {/* Description */}
-        {description && !showGallery && (
+        {description && (
           <p className="modal-description">{description}</p>
         )}
 
