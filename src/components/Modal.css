@@ -108,6 +108,14 @@
   margin: 0;
 }
 
+.testimonial-attribution {
+  display: block;
+  margin-top: 10px;
+  font-style: normal;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
 /* YouTube Container */
 .youtube-container {
   position: relative;

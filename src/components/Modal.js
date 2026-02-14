@@ -270,11 +270,25 @@ const Modal = ({ isOpen, onClose, media, mediaList, title, description, testimon
         )}
 
         {/* Testimonial */}
-        {testimonial && (
-          <blockquote className="modal-testimonial">
-            <p>"{testimonial}"</p>
-          </blockquote>
-        )}
+        {testimonial && (() => {
+          // Split testimonial into quote and attribution (looks for " -" pattern)
+          const dashIndex = testimonial.lastIndexOf(' -');
+          if (dashIndex > 0) {
+            const quote = testimonial.substring(0, dashIndex);
+            const attribution = testimonial.substring(dashIndex + 1); // keeps the dash
+            return (
+              <blockquote className="modal-testimonial">
+                <p>"{quote}"</p>
+                <cite className="testimonial-attribution">{attribution}</cite>
+              </blockquote>
+            );
+          }
+          return (
+            <blockquote className="modal-testimonial">
+              <p>"{testimonial}"</p>
+            </blockquote>
+          );
+        })()}
 
         {/* Gallery View */}
         {showGallery && (
