@@ -18,7 +18,7 @@ export const defaultPerformers = [
     name: 'The Sessions',
     category: 'Live Music',
     description: 'Versatile cover band specializing in rock, pop, and jazz classics.',
-    testimonial: '',
+    testimonial: 'The event was incredible and you guys blew us away! -Claire Walden MN Vikings Events',
     photo: {
       src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2F2K0A2774_1.jpg?alt=media&token=9c8c88cc-4771-4251-9fff-e2c768b66424',
       name: 'The Sessions'
