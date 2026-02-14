@@ -182,11 +182,11 @@
 }
 
 .about-text p {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   color: rgba(255, 255, 255, 0.9);
-  max-width: 800px;
-  margin: 0 auto 20px;
-  line-height: 1.8;
+  max-width: 900px;
+  margin: 0 auto 25px;
+  line-height: 1.9;
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 15;
