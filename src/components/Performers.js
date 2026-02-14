@@ -10,6 +10,7 @@ const Performers = ({ initialData }) => {
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [selectedMediaList, setSelectedMediaList] = useState(null);
   const [modalTitle, setModalTitle] = useState('');
+  const [modalDescription, setModalDescription] = useState('');
   const [performers, setPerformers] = useState(initialData || []);
   const [isLoading, setIsLoading] = useState(!initialData);
 
@@ -37,6 +38,7 @@ const Performers = ({ initialData }) => {
 
   const handleLearnMore = (performer) => {
     setModalTitle(performer.name);
+    setModalDescription(performer.description);
 
     // Check for new mediaList format (multiple media)
     if (performer.mediaList && performer.mediaList.length > 0) {
@@ -62,6 +64,7 @@ const Performers = ({ initialData }) => {
     setSelectedMedia(null);
     setSelectedMediaList(null);
     setModalTitle('');
+    setModalDescription('');
   };
 
   return (
@@ -92,7 +95,7 @@ const Performers = ({ initialData }) => {
               return (
                 <article
                   key={id}
-                  className="performer-card"
+                  className={`performer-card ${hasMedia ? 'has-media' : ''}`}
                   role="listitem"
                   aria-labelledby={`performer-name-${id}`}
                 >
@@ -112,21 +115,15 @@ const Performers = ({ initialData }) => {
                     )}
                   </div>
                   <div className="performer-info">
-                    <span className="performer-category" aria-label={`Category: ${category}`}>
-                      {category}
-                    </span>
                     <h3 id={`performer-name-${id}`}>{name}</h3>
-                    <p>{description}</p>
-                    {hasMedia ? (
+                    {hasMedia && (
                       <button
-                        className="book-btn"
-                        onClick={() => handleLearnMore({ name, media, mediaList })}
-                        aria-label={`Learn more about ${name}`}
+                        className="more-btn"
+                        onClick={() => handleLearnMore({ name, description, media, mediaList })}
+                        aria-label={`View more about ${name}`}
                       >
-                        Learn More
+                        More
                       </button>
-                    ) : (
-                      <span className="no-media-text">Media coming soon</span>
                     )}
                   </div>
                 </article>
@@ -142,6 +139,7 @@ const Performers = ({ initialData }) => {
         media={selectedMedia}
         mediaList={selectedMediaList}
         title={modalTitle}
+        description={modalDescription}
       />
     </section>
   );

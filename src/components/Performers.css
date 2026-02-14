@@ -27,7 +27,7 @@
 
 .performers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
 }
 
@@ -37,6 +37,7 @@
   overflow: hidden;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
 }
 
 .performer-card:hover {
@@ -44,13 +45,34 @@
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
+/* Dim effect on hover for cards with media */
+.performer-card.has-media::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 15px;
+}
+
+.performer-card.has-media:hover::before {
+  background: rgba(0, 0, 0, 0.4);
+}
+
 .performer-image {
-  height: 200px;
+  height: 280px;
   background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  position: relative;
+  z-index: 0;
 }
 
 .performer-photo {
@@ -92,56 +114,62 @@
   color: #666;
 }
 
-.no-media-text {
-  display: inline-block;
-  color: #999;
-  font-size: 0.9rem;
-  font-style: italic;
-}
-
 .performer-info {
-  padding: 25px;
-}
-
-.performer-category {
-  display: inline-block;
-  background: #e94560;
-  color: #fff;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-bottom: 15px;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .performer-info h3 {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: #1a1a2e;
-  margin-bottom: 10px;
+  margin: 0;
+  transition: color 0.3s ease;
 }
 
-.performer-info p {
-  color: #666;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 20px;
+/* Change text color on hover */
+.performer-card.has-media:hover .performer-info h3 {
+  color: #fff;
 }
 
-.book-btn {
-  background: transparent;
-  border: 2px solid #1a1a2e;
-  color: #1a1a2e;
-  padding: 10px 25px;
+/* More button - hidden by default */
+.more-btn {
+  background: #e94560;
+  border: none;
+  color: #fff;
+  padding: 10px 30px;
   border-radius: 25px;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(10px);
+  margin-top: 15px;
+  position: relative;
+  z-index: 5;
 }
 
-.book-btn:hover {
-  background: #1a1a2e;
-  color: #fff;
+/* Show button on hover */
+.performer-card.has-media:hover .more-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.more-btn:hover {
+  background: #d63d56;
+  transform: scale(1.05);
+}
+
+.more-btn:focus {
+  outline: 2px solid #e94560;
+  outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
@@ -151,5 +179,23 @@
 
   .performers-grid {
     grid-template-columns: 1fr;
+  }
+
+  .performer-image {
+    height: 250px;
+  }
+
+  /* Always show button on mobile since no hover */
+  .more-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .performer-card.has-media::before {
+    display: none;
+  }
+
+  .performer-info h3 {
+    color: #1a1a2e;
   }
 }
