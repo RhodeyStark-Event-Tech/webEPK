@@ -7,7 +7,7 @@ const Spinner = ({ size = 'medium', color = 'primary', text = '', showLogo = fal
         <div className="spinner-circle"></div>
         {showLogo && (
           <img
-            src="/assets/rs-logo.png"
+            src="/assets/RSlogo.png"
             alt="RS Logo"
             className="spinner-logo"
           />
