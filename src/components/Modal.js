@@ -257,20 +257,31 @@ const Modal = ({ isOpen, onClose, media, mediaList, title, description, testimon
 
         {/* Title */}
         {(title || currentItem?.title) && !showGallery && (
-          <h1 className="modal-title">{currentItem?.title || title}</h1>
+          <h1 className="modal-title">{selectedItem?.title || title}</h1>
         )}
 
         {title && showGallery && (
           <h1 className="modal-title">{title}</h1>
         )}
 
-        {/* Description */}
-        {description && (
+        {/* Description - show media-specific description in single view */}
+        {selectedItem?.description ? (
+          <p className="modal-description">
+            {selectedItem.description.split('\n').map((line, i) => (
+              <span key={i}>{line}{i < selectedItem.description.split('\n').length - 1 && <br />}</span>
+            ))}
+          </p>
+        ) : description && (
           <p className="modal-description">{description}</p>
         )}
 
-        {/* Testimonial */}
-        {testimonial && (() => {
+        {/* Price - show when viewing individual media */}
+        {selectedItem?.price && (
+          <p className="modal-price">{selectedItem.price}</p>
+        )}
+
+        {/* Testimonial - only show in gallery/main view, not single media view */}
+        {!selectedItem && testimonial && (() => {
           // Split testimonial into quote and attribution (looks for " -" pattern)
           const dashIndex = testimonial.lastIndexOf(' -');
           if (dashIndex > 0) {

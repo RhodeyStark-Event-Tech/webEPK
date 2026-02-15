@@ -27,17 +27,23 @@ export const defaultPerformers = [
       {
         type: 'video',
         src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2Fsessions%20mp4.mp4?alt=media&token=cff8da5c-288b-4f64-a7b5-cdf1e96e103b',
-        title: 'The Sessions Performance'
+        title: 'The Sessions 5pc',
+        description: 'DJ/DRUMS/SAX/ 2 VOCALISTS (Backline Gear included)\nCombining the energy of live instrumentation with the endless playlists and genre bending of a DJ The Sessions are a band that can cater to audiences of all ages and walks of life. The Sessions 5 piece is lean and mean with 2 phenomenal vocalists helming the ship. Sessions play for up to 5 hours of music.',
+        price: '$5,500'
       },
       {
         type: 'video',
         src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2FSessions4PC.mp4?alt=media&token=a91b3c3c-fd57-4ecc-a074-7d1a722c0212',
-        title: 'Sessions 4c'
+        title: 'Sessions 4pc',
+        description: 'DJ/DRUMS/KEYS/SAX (Backline Gear included)\nCombining the energy of live instrumentation with the endless playlists and genre bending of a DJ The Sessions are a band that can cater to audiences of all ages and walks of life. The Sessions play for up to 5 hours of continuous music with one goal in mind. Creating memorable moments on the dance floor and beyond.',
+        price: '$5,000'
       },
       {
         type: 'video',
         src: 'https://firebasestorage.googleapis.com/v0/b/rs-epk.firebasestorage.app/o/media%2FSessions10pc.mp4?alt=media&token=d820a08e-cdf5-4236-98c8-6bc793122e51',
-        title: 'Sessions 10pc'
+        title: 'The Sessions 10pc',
+        description: 'DJ/DRUMS/KEYS/SAX/TROMBONE/TRUMPET/BASS/GUITAR/4 VOCALISTS\nThis is a big band with a huge sound that can fill an arena or make your party the ultimate live experience.',
+        price: '$10,000'
       }
     ]
   },
