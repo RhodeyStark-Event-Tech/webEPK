@@ -78,7 +78,7 @@ const App = () => {
     return (
       <div className="app-loading-overlay">
         <div className="app-loading-content">
-          <Spinner size="large" color="white" />
+          <Spinner size="xlarge" color="white" showLogo={true} />
           <p className="app-loading-text">loading talent...</p>
         </div>
       </div>
