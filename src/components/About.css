@@ -64,6 +64,29 @@
   font-weight: 600;
   letter-spacing: 5px;
   text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: taglineAppear 15s ease-out infinite;
+}
+
+/* Tagline appears at 3s (20%), fully visible by 5s (33%) */
+@keyframes taglineAppear {
+  0%, 19% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  20% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  33% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Who We Are / About content */
