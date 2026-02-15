@@ -61,9 +61,7 @@ const About = () => {
         <div className="hero-text">
           <h1 id="about-heading" className="hero-title">RhodeyStark Events</h1>
           <p className="tagline" role="doc-subtitle">
-            <span className="tagline-word tagline-fun">FUN.</span>
-            <span className="tagline-word tagline-easy">EASY.</span>
-            <span className="tagline-word tagline-knowledgable">KNOWLEDGABLE.</span>
+            Make An Impact
           </p>
         </div>
       </div>

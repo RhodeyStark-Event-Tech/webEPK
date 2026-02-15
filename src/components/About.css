@@ -60,92 +60,10 @@
   margin-top: 25px;
   position: relative;
   z-index: 25;
-}
-
-.tagline-word {
-  display: inline-block;
   font-size: 2.2rem;
   font-weight: 600;
   letter-spacing: 5px;
   text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
-  margin: 0 10px;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-/* FUN. appears at 3s, fades in over 2 seconds */
-.tagline-fun {
-  animation: funAppear 15s ease-out infinite;
-}
-
-/* EASY. appears at 6s, fades in over 2 seconds */
-.tagline-easy {
-  animation: easyAppear 15s ease-out infinite;
-}
-
-/* KNOWLEDGABLE. appears at 9s, fades in over 2 seconds */
-.tagline-knowledgable {
-  animation: knowledgableAppear 15s ease-out infinite;
-}
-
-/* FUN - appears at 3s (20%), fully visible by 5s (33%) */
-@keyframes funAppear {
-  0%, 19% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  20% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  33% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* EASY - appears at 6s (40%), fully visible by 8s (53%) */
-@keyframes easyAppear {
-  0%, 39% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  40% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  53% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* KNOWLEDGABLE - appears at 9s (60%), fully visible by 11s (73%) */
-@keyframes knowledgableAppear {
-  0%, 59% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  60% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  73% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Who We Are / About content */
@@ -244,10 +162,9 @@
     letter-spacing: 2px;
   }
 
-  .tagline-word {
+  .tagline {
     font-size: 1.2rem;
     letter-spacing: 3px;
-    margin: 0 5px;
   }
 
   .about-text h2 {
