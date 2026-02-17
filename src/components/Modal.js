@@ -277,7 +277,7 @@ const Modal = ({ isOpen, onClose, media, mediaList, title, description, testimon
 
         {/* Price - show when viewing individual media */}
         {selectedItem?.price && (
-          <p className="modal-price">{selectedItem.price}</p>
+          <p className="modal-price"><span className="modal-price-label">starting price:</span> {selectedItem.price}</p>
         )}
 
         {/* Testimonial - only show in gallery/main view, not single media view */}
