@@ -9,6 +9,7 @@ import Uploads from './components/Uploads';
 import CardManagement from './components/CardManagement';
 import LoginModal from './components/LoginModal';
 import Spinner from './components/Spinner';
+import BookingForm from './components/BookingForm';
 import { getPerformers } from './firebase/performerService';
 import { getCards } from './firebase/cardService';
 import './App.css';
@@ -21,6 +22,7 @@ const App = () => {
   const [performers, setPerformers] = useState([]);
   const [cards, setCards] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [showBookingForm, setShowBookingForm] = useState(false);
 
   const scrollToSection = (sectionId) => {
     setActiveSection(sectionId);
@@ -101,12 +103,13 @@ const App = () => {
         </header>
         <main id="main-content" role="main" aria-label="Main content">
           <About />
-          <Performers initialData={dataLoaded ? performers : null} />
+          <Performers initialData={dataLoaded ? performers : null} onBookNow={() => setShowBookingForm(true)} />
           <Cards initialData={dataLoaded ? cards : null} />
-          <Contact />
+          <Contact onBookNow={() => setShowBookingForm(true)} />
           {isSuperAdmin && <Uploads />}
           {isSuperAdmin && <CardManagement />}
         </main>
+        <BookingForm isOpen={showBookingForm} onClose={() => setShowBookingForm(false)} />
         <footer className="footer" role="contentinfo">
           <p>&copy; 2026 RhodeyStark Events. All rights reserved.</p>
         </footer>

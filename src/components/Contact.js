@@ -1,8 +1,6 @@
 import './Contact.css';
 
-const BOOKING_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScjkQJ-zXpR-GW-cXaXnpCyiX0vU_vemeCXL7g4weWQhfCKiA/viewform?usp=sharing&ouid=111455180566421488224';
-
-const Contact = () => {
+const Contact = ({ onBookNow }) => {
   return (
     <section
       id="contact"
@@ -53,15 +51,13 @@ const Contact = () => {
 
           <div className="contact-cta">
             <p className="cta-text">Ready to make your event unforgettable?</p>
-            <a
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
               className="contact-btn"
-              aria-label="Contact us - opens booking form in new tab"
+              onClick={onBookNow}
+              aria-label="Contact us - opens booking form"
             >
               Contact Us
-            </a>
+            </button>
           </div>
         </div>
       </div>

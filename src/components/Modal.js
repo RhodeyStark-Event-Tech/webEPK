@@ -101,7 +101,7 @@ const VideoThumbnail = ({ src, alt }) => {
   );
 };
 
-const Modal = ({ isOpen, onClose, media, mediaList, title, description, testimonial }) => {
+const Modal = ({ isOpen, onClose, media, mediaList, title, description, testimonial, onBookNow }) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   // Reset selected item when modal closes
@@ -349,15 +349,16 @@ const Modal = ({ isOpen, onClose, media, mediaList, title, description, testimon
         {/* Book Now Button */}
         {!showGallery && (
           <div className="modal-actions">
-            <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLScjkQJ-zXpR-GW-cXaXnpCyiX0vU_vemeCXL7g4weWQhfCKiA/viewform?usp=sharing&ouid=111455180566421488224"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
               className="book-now-btn"
-              aria-label="Book this performer - opens booking form in new tab"
+              onClick={() => {
+                onClose();
+                if (onBookNow) onBookNow();
+              }}
+              aria-label="Book this performer - opens booking form"
             >
               Book Now
-            </a>
+            </button>
           </div>
         )}
       </div>

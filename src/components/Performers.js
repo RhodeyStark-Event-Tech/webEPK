@@ -5,7 +5,7 @@ import OptimizedImage from './OptimizedImage';
 import { getPerformers } from '../firebase/performerService';
 import './Performers.css';
 
-const Performers = ({ initialData }) => {
+const Performers = ({ initialData, onBookNow }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [selectedMediaList, setSelectedMediaList] = useState(null);
@@ -144,6 +144,7 @@ const Performers = ({ initialData }) => {
         title={modalTitle}
         description={modalDescription}
         testimonial={modalTestimonial}
+        onBookNow={onBookNow}
       />
     </section>
   );
