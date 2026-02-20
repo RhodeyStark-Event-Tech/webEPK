@@ -257,30 +257,7 @@ const BookingForm = ({ isOpen, onClose }) => {
         const value = answers[q.key];
         if (!value) return;
 
-        if (q.type === 'date' && value) {
-          const [year, month, day] = value.split('-');
-          const addHidden = (suffix, val) => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = `entry.${q.entryId}${suffix}`;
-            input.value = val;
-            form.appendChild(input);
-          };
-          addHidden('_year', year);
-          addHidden('_month', month);
-          addHidden('_day', day);
-        } else if (q.type === 'time' && value) {
-          const [hour, minute] = value.split(':');
-          const addHidden = (suffix, val) => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = `entry.${q.entryId}${suffix}`;
-            input.value = val;
-            form.appendChild(input);
-          };
-          addHidden('_hour', hour);
-          addHidden('_minute', minute);
-        } else if (q.type === 'checkbox' && Array.isArray(value)) {
+        if (q.type === 'checkbox' && Array.isArray(value)) {
           value.forEach((v) => {
             const input = document.createElement('input');
             input.type = 'hidden';
@@ -289,6 +266,7 @@ const BookingForm = ({ isOpen, onClose }) => {
             form.appendChild(input);
           });
         } else {
+          // Send all values (including date/time) as simple strings
           const input = document.createElement('input');
           input.type = 'hidden';
           input.name = `entry.${q.entryId}`;
