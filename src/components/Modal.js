@@ -352,8 +352,9 @@ const Modal = ({ isOpen, onClose, media, mediaList, title, description, testimon
             <button
               className="book-now-btn"
               onClick={() => {
+                const price = selectedItem?.price || '';
                 onClose();
-                if (onBookNow) onBookNow();
+                if (onBookNow) onBookNow(price);
               }}
               aria-label="Book this performer - opens booking form"
             >

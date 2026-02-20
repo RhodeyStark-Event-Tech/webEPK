@@ -118,7 +118,7 @@ const QUESTIONS = [
   }
 ];
 
-const BookingForm = ({ isOpen, onClose }) => {
+const BookingForm = ({ isOpen, onClose, price }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [direction, setDirection] = useState('forward');
@@ -246,6 +246,7 @@ const BookingForm = ({ isOpen, onClose }) => {
     setIsSubmitting(true);
     const submissionData = {
       ...answers,
+      price: price || '',
       submittedAt: new Date().toISOString()
     };
     console.log('=== FORM SUBMITTED ===');

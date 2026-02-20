@@ -23,6 +23,7 @@ const App = () => {
   const [cards, setCards] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [bookingPrice, setBookingPrice] = useState('');
 
   const scrollToSection = (sectionId) => {
     setActiveSection(sectionId);
@@ -103,13 +104,13 @@ const App = () => {
         </header>
         <main id="main-content" role="main" aria-label="Main content">
           <About />
-          <Performers initialData={dataLoaded ? performers : null} onBookNow={() => setShowBookingForm(true)} />
+          <Performers initialData={dataLoaded ? performers : null} onBookNow={(price) => { setBookingPrice(price || ''); setShowBookingForm(true); }} />
           <Cards initialData={dataLoaded ? cards : null} />
-          <Contact onBookNow={() => setShowBookingForm(true)} />
+          <Contact onBookNow={() => { setBookingPrice(''); setShowBookingForm(true); }} />
           {isSuperAdmin && <Uploads />}
           {isSuperAdmin && <CardManagement />}
         </main>
-        <BookingForm isOpen={showBookingForm} onClose={() => setShowBookingForm(false)} />
+        <BookingForm isOpen={showBookingForm} onClose={() => setShowBookingForm(false)} price={bookingPrice} />
         <footer className="footer" role="contentinfo">
           <p>&copy; 2026 RhodeyStark Events. All rights reserved.</p>
         </footer>

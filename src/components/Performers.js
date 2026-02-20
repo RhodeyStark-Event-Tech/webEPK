@@ -144,7 +144,7 @@ const Performers = ({ initialData, onBookNow }) => {
         title={modalTitle}
         description={modalDescription}
         testimonial={modalTestimonial}
-        onBookNow={onBookNow}
+        onBookNow={(price) => onBookNow && onBookNow(price)}
       />
     </section>
   );
