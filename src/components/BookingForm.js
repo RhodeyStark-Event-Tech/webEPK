@@ -248,7 +248,8 @@ const BookingForm = ({ isOpen, onClose }) => {
       ...answers,
       submittedAt: new Date().toISOString()
     };
-    console.log('Submitting booking form with answers:', submissionData);
+    console.log('=== FORM SUBMITTED ===');
+    console.log('Submission data with timestamp:', submissionData);
 
     // Build pre-filled URL
     const params = new URLSearchParams();
