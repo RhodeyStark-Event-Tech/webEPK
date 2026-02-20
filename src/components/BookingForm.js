@@ -135,6 +135,11 @@ const BookingForm = ({ isOpen, onClose }) => {
   const currentQuestion = visibleQuestions[currentStep];
   const progress = ((currentStep) / totalSteps) * 100;
 
+  // Log answers whenever they change
+  useEffect(() => {
+    console.log('Booking form answers:', answers);
+  }, [answers]);
+
   // Reset state when form opens/closes
   useEffect(() => {
     if (!isOpen) {
