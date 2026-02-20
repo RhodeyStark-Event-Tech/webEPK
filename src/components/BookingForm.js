@@ -244,9 +244,11 @@ const BookingForm = ({ isOpen, onClose }) => {
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    const timestamp = new Date().toISOString();
-    console.log('Submitting booking form at:', timestamp);
-    console.log('Submitting booking form with answers:', answers);
+    const submissionData = {
+      ...answers,
+      submittedAt: new Date().toISOString()
+    };
+    console.log('Submitting booking form with answers:', submissionData);
 
     // Build pre-filled URL
     const params = new URLSearchParams();
