@@ -237,45 +237,77 @@ const BookingForm = ({ isOpen, onClose }) => {
     }
   };
 
-  const buildFormData = () => {
-    const formData = new URLSearchParams();
-
-    QUESTIONS.forEach((q) => {
-      if (q.condition && !q.condition(answers)) return;
-      const value = answers[q.key];
-      if (!value) return;
-
-      if (q.type === 'date' && value) {
-        const [year, month, day] = value.split('-');
-        formData.append(`entry.${q.entryId}_year`, year);
-        formData.append(`entry.${q.entryId}_month`, month);
-        formData.append(`entry.${q.entryId}_day`, day);
-      } else if (q.type === 'time' && value) {
-        const [hour, minute] = value.split(':');
-        formData.append(`entry.${q.entryId}_hour`, hour);
-        formData.append(`entry.${q.entryId}_minute`, minute);
-      } else if (q.type === 'checkbox' && Array.isArray(value)) {
-        value.forEach((v) => formData.append(`entry.${q.entryId}`, v));
-      } else {
-        formData.append(`entry.${q.entryId}`, value);
-      }
-    });
-
-    return formData;
-  };
-
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      await fetch(FORM_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: buildFormData().toString()
+      // Use hidden form + iframe to bypass CORS restrictions on Google Forms
+      const iframe = document.createElement('iframe');
+      iframe.name = 'booking-form-iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = FORM_URL;
+      form.target = 'booking-form-iframe';
+      form.style.display = 'none';
+
+      QUESTIONS.forEach((q) => {
+        if (q.condition && !q.condition(answers)) return;
+        const value = answers[q.key];
+        if (!value) return;
+
+        if (q.type === 'date' && value) {
+          const [year, month, day] = value.split('-');
+          const addHidden = (suffix, val) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `entry.${q.entryId}${suffix}`;
+            input.value = val;
+            form.appendChild(input);
+          };
+          addHidden('_year', year);
+          addHidden('_month', month);
+          addHidden('_day', day);
+        } else if (q.type === 'time' && value) {
+          const [hour, minute] = value.split(':');
+          const addHidden = (suffix, val) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `entry.${q.entryId}${suffix}`;
+            input.value = val;
+            form.appendChild(input);
+          };
+          addHidden('_hour', hour);
+          addHidden('_minute', minute);
+        } else if (q.type === 'checkbox' && Array.isArray(value)) {
+          value.forEach((v) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `entry.${q.entryId}`;
+            input.value = v;
+            form.appendChild(input);
+          });
+        } else {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = `entry.${q.entryId}`;
+          input.value = value;
+          form.appendChild(input);
+        }
       });
+
+      document.body.appendChild(form);
+      form.submit();
+
+      // Clean up after submission
+      setTimeout(() => {
+        document.body.removeChild(form);
+        document.body.removeChild(iframe);
+      }, 2000);
+
       setIsComplete(true);
     } catch {
-      // no-cors mode won't give us a readable response, but the submission still goes through
       setIsComplete(true);
     } finally {
       setIsSubmitting(false);
