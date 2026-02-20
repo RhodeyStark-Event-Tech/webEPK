@@ -92,14 +92,6 @@ const QUESTIONS = [
     entryId: '2126122339'
   },
   {
-    key: 'expectedAttendees',
-    label: 'How many people are you expecting to attend?',
-    type: 'text',
-    placeholder: 'e.g. 200',
-    required: true,
-    entryId: '207836792'
-  },
-  {
     key: 'readyToBook',
     label: 'Are you ready to book entertainment right now?',
     type: 'radio',
