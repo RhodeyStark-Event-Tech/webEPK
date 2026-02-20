@@ -244,6 +244,7 @@ const BookingForm = ({ isOpen, onClose }) => {
 
   const handleSubmit = () => {
     setIsSubmitting(true);
+    console.log('Submitting booking form with answers:', answers);
 
     // Build pre-filled URL
     const params = new URLSearchParams();
