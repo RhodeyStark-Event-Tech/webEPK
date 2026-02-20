@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import './BookingForm.css';
 
-const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScjkQJ-zXpR-GW-cXaXnpCyiX0vU_vemeCXL7g4weWQhfCKiA/formResponse';
+const FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScjkQJ-zXpR-GW-cXaXnpCyiX0vU_vemeCXL7g4weWQhfCKiA/viewform';
 
 const QUESTIONS = [
   {
@@ -237,59 +237,34 @@ const BookingForm = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     setIsSubmitting(true);
-    try {
-      // Use hidden form + iframe to bypass CORS restrictions on Google Forms
-      const iframe = document.createElement('iframe');
-      iframe.name = 'booking-form-iframe';
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
 
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = FORM_URL;
-      form.target = 'booking-form-iframe';
-      form.style.display = 'none';
+    // Build pre-filled URL
+    const params = new URLSearchParams();
+    params.append('usp', 'pp_url');
 
-      QUESTIONS.forEach((q) => {
-        if (q.condition && !q.condition(answers)) return;
-        const value = answers[q.key];
-        if (!value) return;
+    QUESTIONS.forEach((q) => {
+      if (q.condition && !q.condition(answers)) return;
+      const value = answers[q.key];
+      if (!value) return;
 
-        if (q.type === 'checkbox' && Array.isArray(value)) {
-          value.forEach((v) => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = `entry.${q.entryId}`;
-            input.value = v;
-            form.appendChild(input);
-          });
-        } else {
-          // Send all values (including date/time) as simple strings
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = `entry.${q.entryId}`;
-          input.value = value;
-          form.appendChild(input);
-        }
-      });
+      if (q.type === 'checkbox' && Array.isArray(value)) {
+        value.forEach((v) => {
+          params.append(`entry.${q.entryId}`, v);
+        });
+      } else {
+        params.append(`entry.${q.entryId}`, value);
+      }
+    });
 
-      document.body.appendChild(form);
-      form.submit();
+    const prefilledUrl = `${FORM_BASE_URL}?${params.toString()}`;
 
-      // Clean up after submission
-      setTimeout(() => {
-        document.body.removeChild(form);
-        document.body.removeChild(iframe);
-      }, 2000);
+    // Open pre-filled form in new tab
+    window.open(prefilledUrl, '_blank');
 
-      setIsComplete(true);
-    } catch {
-      setIsComplete(true);
-    } finally {
-      setIsSubmitting(false);
-    }
+    setIsSubmitting(false);
+    setIsComplete(true);
   };
 
   if (!isOpen) return null;
@@ -307,8 +282,8 @@ const BookingForm = ({ isOpen, onClose }) => {
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
               </svg>
             </div>
-            <h2>Thank You!</h2>
-            <p>Your booking request has been submitted. We'll be in touch soon!</p>
+            <h2>Almost Done!</h2>
+            <p>We've opened the booking form with your answers pre-filled. Please click <strong>Submit</strong> on that page to complete your request.</p>
             <button className="booking-done-btn" onClick={onClose}>Done</button>
           </div>
         </div>
