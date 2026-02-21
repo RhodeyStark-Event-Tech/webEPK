@@ -19,7 +19,7 @@ const QUESTIONS = [
     required: true
   },
   {
-    key: 'email',
+    key: 'emailAddress',
     label: "What's your email address?",
     type: 'email',
     placeholder: 'you@example.com',
@@ -35,7 +35,7 @@ const QUESTIONS = [
     entryId: '584827614'
   },
   {
-    key: 'eventType',
+    key: 'typeOfEvent',
     label: 'What type of event are you planning?',
     type: 'radio',
     required: true,
@@ -43,7 +43,7 @@ const QUESTIONS = [
     options: ['Corporate Event', 'Non-profit Event', 'Wedding', 'Private Party', 'Other']
   },
   {
-    key: 'entertainmentType',
+    key: 'typeOfEntertainment',
     label: 'What type of entertainment are you interested in?',
     subtitle: 'Select all that apply',
     type: 'checkbox',
@@ -61,7 +61,7 @@ const QUESTIONS = [
     options: ['Silent Disco', 'Karaoke', "Rhodey's Playhouse Variety show", 'Interactive Game Shows', 'Fitness events', 'Custom experience']
   },
   {
-    key: 'attendeeCount',
+    key: 'peopleInAttendance',
     label: 'How many people are attending the event?',
     type: 'radio',
     required: false,
@@ -76,21 +76,21 @@ const QUESTIONS = [
     entryId: '251535084'
   },
   {
-    key: 'startTime',
+    key: 'eventStartTime',
     label: 'What time does the event start?',
     type: 'time',
     required: true,
     entryId: '1110729968'
   },
   {
-    key: 'endTime',
+    key: 'eventEndTime',
     label: 'What time does the event end?',
     type: 'time',
     required: false,
     entryId: '1885520836'
   },
   {
-    key: 'eventLocation',
+    key: 'eventAddress',
     label: 'Where is the event?',
     type: 'text',
     placeholder: 'Venue name or address',
@@ -252,8 +252,8 @@ const BookingForm = ({ isOpen, onClose, price }) => {
     setIsSubmitting(true);
     const submissionData = {
       ...answers,
-      price: price || '',
-      submittedAt: new Date().toISOString()
+      eventPrice: price || '',
+      timeStamp: new Date().toISOString()
     };
     console.log('=== FORM SUBMITTED ===');
     console.log('Submission data with timestamp:', submissionData);
