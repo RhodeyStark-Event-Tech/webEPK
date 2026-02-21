@@ -27,7 +27,7 @@ const QUESTIONS = [
     entryId: '1413057595'
   },
   {
-    key: 'phone',
+    key: 'phoneNumber',
     label: "What's your phone number?",
     type: 'tel',
     placeholder: '(555) 123-4567',
