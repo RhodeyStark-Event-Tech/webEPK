@@ -254,6 +254,24 @@ const BookingForm = ({ isOpen, onClose, price }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
+    // Format date helper: YYYY-MM-DD to M/D/YYYY
+    const formatDate = (dateStr) => {
+      if (!dateStr) return '';
+      const [year, month, day] = dateStr.split('-');
+      return `${parseInt(month)}/${parseInt(day)}/${year}`;
+    };
+
+    // Format timestamp helper: to M/D/YYYY HH:MM:SS
+    const formatTimestamp = (date) => {
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const hours = date.getHours();
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const seconds = date.getSeconds().toString().padStart(2, '0');
+      return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
+    };
+
     // Convert array values to comma-separated strings
     const processedAnswers = { ...answers };
     Object.keys(processedAnswers).forEach(key => {
@@ -262,10 +280,15 @@ const BookingForm = ({ isOpen, onClose, price }) => {
       }
     });
 
+    // Format eventDate
+    if (processedAnswers.eventDate) {
+      processedAnswers.eventDate = formatDate(processedAnswers.eventDate);
+    }
+
     const submissionData = {
       ...processedAnswers,
       eventPrice: price || '',
-      timeStamp: new Date().toISOString()
+      timeStamp: formatTimestamp(new Date())
     };
     console.log('=== FORM SUBMITTED ===');
     console.log('Submission data with timestamp:', submissionData);
