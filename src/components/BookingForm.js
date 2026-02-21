@@ -5,12 +5,18 @@ const FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScjkQJ-zXpR-GW-c
 
 const QUESTIONS = [
   {
-    key: 'fullName',
-    label: "What's your full name?",
+    key: 'firstName',
+    label: "What's your first name?",
     type: 'text',
-    placeholder: 'Enter your full name',
-    required: true,
-    entryId: '875766835'
+    placeholder: 'Enter your first name',
+    required: true
+  },
+  {
+    key: 'lastName',
+    label: "What's your last name?",
+    type: 'text',
+    placeholder: 'Enter your last name',
+    required: true
   },
   {
     key: 'email',
@@ -256,8 +262,17 @@ const BookingForm = ({ isOpen, onClose, price }) => {
     const params = new URLSearchParams();
     params.append('usp', 'pp_url');
 
+    // Combine first and last name for Google Form's Full Name field
+    const fullName = `${answers.firstName || ''} ${answers.lastName || ''}`.trim();
+    if (fullName) {
+      params.append('entry.875766835', fullName);
+    }
+
     QUESTIONS.forEach((q) => {
+      // Skip firstName/lastName as they're combined above
+      if (q.key === 'firstName' || q.key === 'lastName') return;
       if (q.condition && !q.condition(answers)) return;
+      if (!q.entryId) return;
       const value = answers[q.key];
       if (!value) return;
 
