@@ -1,0 +1,17 @@
+{
+  "attendeeCount": "100-150 people",
+  "email": "yo@yo.com",
+  "endTime": "22:00",
+  "entertainmentType": ["Hosts"],
+  "eventDate": "2027-02-22",
+  "eventLocation": "12334 short lane",
+  "eventType": "Non-profit Event",
+  "experienceType": ["Karaoke"],
+  "firstName": "Yo at test me",
+  "lastName": "bliss",
+  "phone": "eganalrkn",
+  "price": "$5,000",
+  "readyToBook": "Yes",
+  "startTime": "14:00",
+  "submittedAt": "2026-02-21T03:00:42.701Z"
+}
