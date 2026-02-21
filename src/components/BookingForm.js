@@ -253,8 +253,17 @@ const BookingForm = ({ isOpen, onClose, price }) => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+
+    // Convert array values to comma-separated strings
+    const processedAnswers = { ...answers };
+    Object.keys(processedAnswers).forEach(key => {
+      if (Array.isArray(processedAnswers[key])) {
+        processedAnswers[key] = processedAnswers[key].join(', ');
+      }
+    });
+
     const submissionData = {
-      ...answers,
+      ...processedAnswers,
       eventPrice: price || '',
       timeStamp: new Date().toISOString()
     };
